@@ -5,49 +5,49 @@ package com.cunoraz.eksiseyler.Utility;
  */
 
 public class Tags {
-    public static final String KULTUR = "kultur";
+    public static final String KULTUR = "kategori/kultur";
 
-    public static final String BILIM = "bilim";
+    public static final String BILIM = "kategori/bilim";
 
-    public static final String EGLENCE = "eglence";
+    public static final String EGLENCE = "kategori/eglence";
 
-    public static final String YASAM = "yasam";
+    public static final String YASAM = "kategori/yasam";
 
-    public static final String SPOR = "spor";
+    public static final String SPOR = "kategori/spor";
 
-    public static final String HABER = "haber";
+    public static final String HABER = "kategori/haber";
 
-    public static final String EDEBIYAT = "edebiyat";
+    public static final String EDEBIYAT = "kanal/edebiyat";
 
-    public static final String ILISKILER = "iliskiler";
+    public static final String ILISKILER = "kanal/iliskiler";
 
-    public static final String SIYASET = "siyaset";
+    public static final String SIYASET = "kanal/siyaset";
 
-    public static final String OTOMOTIV = "otomotiv";
+    public static final String OTOMOTIV = "kanal/otomotiv";
 
-    public static final String MAGAZIN = "magazin";
+    public static final String MAGAZIN = "kanal/magazin";
 
-    public static final String MODA = "moda";
+    public static final String MODA = "kanal/moda";
 
-    public static final String MOTOSIKLET = "motosiklet";
+    public static final String MOTOSIKLET = "kanal/motosiklet";
 
-    public static final String MUZIK = "muzik";
+    public static final String MUZIK = "kanal/muzik";
 
-    public static final String OYUN = "oyun";
+    public static final String OYUN = "kanal/oyun";
 
-    public static final String PROGRAMLAMA = "programlama";
+    public static final String PROGRAMLAMA = "kanal/programlama";
 
-    public static final String SAGLIK = "saglik";
+    public static final String SAGLIK = "kanal/saglik";
 
-    public static final String SANAT = "sanat";
+    public static final String SANAT = "kanal/sanat";
 
-    public static final String SINEMA = "sinema";
+    public static final String SINEMA = "kanal/sinema";
 
-    public static final String SPOILER = "spoiler";
+    public static final String SPOILER = "kanal/spoiler";
 
-    public static final String TARIH = "tarih";
+    public static final String TARIH = "kanal/tarih";
 
-    public static final String TEKNOLOJI = "teknoloji";
+    public static final String TEKNOLOJI = "kanal/teknoloji";
 
-    public static final String YEME_ICME = "yeme-icme";
+    public static final String YEME_ICME = "kanal/yeme-icme";
 }

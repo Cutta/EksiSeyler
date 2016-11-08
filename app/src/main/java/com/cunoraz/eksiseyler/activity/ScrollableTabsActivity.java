@@ -10,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.cunoraz.eksiseyler.R;
+import com.cunoraz.eksiseyler.Utility.Tags;
 import com.cunoraz.eksiseyler.fragment.ContextFragment;
+import com.cunoraz.eksiseyler.model.Channel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,16 +42,31 @@ public class ScrollableTabsActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new ContextFragment(), "ONE");
-        adapter.addFrag(new ContextFragment(), "TWO");
-        adapter.addFrag(new ContextFragment(), "THREE");
-        adapter.addFrag(new ContextFragment(), "FOUR");
-        adapter.addFrag(new ContextFragment(), "FIVE");
-        adapter.addFrag(new ContextFragment(), "SIX");
-        adapter.addFrag(new ContextFragment(), "SEVEN");
-        adapter.addFrag(new ContextFragment(), "EIGHT");
-        adapter.addFrag(new ContextFragment(), "NINE");
-        adapter.addFrag(new ContextFragment(), "TEN");
+
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.BILIM,"BİLİM")),"BİLİM");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.EDEBIYAT,"EDEBİYAT")),"EDEBİYAT");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.EGLENCE,"EĞLENCE")),"EĞLENCE");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.HABER,"HABER")),"HABER");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.ILISKILER,"İLİŞKİLER")),"İLİŞKİLER");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.KULTUR,"KÜLTÜR")),"KÜLTÜR");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.MAGAZIN,"MAGAZİN")),"MAGAZİN");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.MODA,"MODA")),"MODA");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.MOTOSIKLET,"MOTOSİKLET")),"MOTOSİKLET");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.MUZIK,"MÜZİK")),"MÜZİK");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.OTOMOTIV,"OTOMOTİV")),"OTOMOTİV");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.OYUN,"OYUN")),"OYUN");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.PROGRAMLAMA,"PROGRAMLAMA")),"PROGRAMLAMA");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.SAGLIK,"SAĞLIK")),"SAĞLIK");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.SANAT,"SANAT")),"SANAT");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.SINEMA,"SİNEMA")),"SİNEMA");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.SIYASET,"SİYASET")),"SİYASET");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.SPOILER,"SPOILER")),"SPOILER");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.SPOR,"SPOR")),"SPOR");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.TARIH,"TARİH")),"TARİH");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.TEKNOLOJI,"TEKNOLOJİ")),"TEKNOLOJİ");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.YASAM,"YAŞAM")),"YAŞAM");
+        adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.YEME_ICME,"YEME_İÇME")),"YEME_İÇME");
+
         viewPager.setAdapter(adapter);
     }
 
@@ -71,9 +88,9 @@ public class ScrollableTabsActivity extends AppCompatActivity {
             return mFragmentList.size();
         }
 
-        public void addFrag(Fragment fragment, String title) {
+        public void addFrag(Fragment fragment,String name) {
             mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
+            mFragmentTitleList.add(name);
         }
 
         @Override

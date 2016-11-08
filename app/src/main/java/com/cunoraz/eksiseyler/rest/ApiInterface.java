@@ -9,7 +9,7 @@ import retrofit2.http.Path;
 public interface ApiInterface {
 
 
-    @GET("kategori/{kanal}")
+    @GET("{kanal}")
     Call<ResponseBody> getSiteContent(@Path("kanal") String channel);
 
 }

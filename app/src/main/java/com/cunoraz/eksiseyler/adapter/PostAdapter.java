@@ -1,5 +1,6 @@
 package com.cunoraz.eksiseyler.adapter;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cunoraz.eksiseyler.R;
+import com.cunoraz.eksiseyler.fragment.ContextFragment;
 import com.cunoraz.eksiseyler.model.Post;
 
 import java.util.List;
@@ -28,6 +30,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
     private Context context;
 
+    private ContextFragment fragment;
+
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView text;
         CardView cardView;
@@ -35,14 +39,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
         MyViewHolder(View view) {
             super(view);
-            image = (ImageView)view.findViewById(R.id.row_image);
+            image = (ImageView) view.findViewById(R.id.row_image);
             text = (TextView) view.findViewById(R.id.row_title);
             cardView = (CardView) view.findViewById(R.id.item_root);
         }
     }
 
 
-    public PostAdapter(List<Post> itemList) {
+    public PostAdapter(ContextFragment fragment,List<Post> itemList) {
+        this.fragment = fragment;
         this.itemList = itemList;
     }
 
@@ -53,7 +58,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_post, parent, false);
         context = parent.getContext();
-       // itemClick = (ItemClick) parent.getContext();
+        itemClick = fragment;
 
         return new MyViewHolder(itemView);
     }
@@ -66,7 +71,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                itemClick.onClick(view, holder.getAdapterPosition());
+                itemClick.onClick(view, holder.getAdapterPosition());
             }
         });
     }
