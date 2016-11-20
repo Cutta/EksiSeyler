@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.fragment.ContextFragment;
 import com.cunoraz.eksiseyler.model.Post;
@@ -67,7 +68,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Post item = itemList.get(position);
         holder.text.setText(item.getName());
-        Glide.with(context).load(item.getImg()).into(holder.image);
+        Glide.with(context).
+                load(item.getImg())
+                .diskCacheStrategy( DiskCacheStrategy.RESULT )
+                .into(holder.image);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

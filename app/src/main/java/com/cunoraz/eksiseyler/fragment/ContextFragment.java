@@ -2,6 +2,8 @@ package com.cunoraz.eksiseyler.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.activity.DetailActivity;
@@ -19,6 +22,7 @@ import com.cunoraz.eksiseyler.rest.ApiClient;
 import com.cunoraz.eksiseyler.rest.ApiInterface;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -34,6 +38,7 @@ import retrofit2.Response;
 
 /**
  * Created by cuneytcarikci on 07/11/2016.
+ *
  */
 
 public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
@@ -112,9 +117,9 @@ public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
             return;
         try {
             Element doc = Jsoup.parse((response.body().string()));
-            Elements heros = doc.getElementsByClass("mashup-card-item col-5of1");
+            Elements heroes = doc.getElementsByClass("mashup-card-item col-5of1");
             Post post;
-            for (Element element : heros) {
+            for (Element element : heroes) {
                 post = new Post();
                 post.setUrl(element.select("a").attr("href"));
                 post.setImg(element.select("img").attr("src"));
@@ -139,9 +144,9 @@ public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
         try {
             Element doc = Jsoup.parse((response.body().string()));
             //    Elements links = doc.select("div");
-            Elements heros = doc.getElementsByClass("col col-1of4");
+            Elements heroes = doc.getElementsByClass("col col-1of4");
             Post post;
-            for (Element element : heros) {
+            for (Element element : heroes) {
                 post = new Post();
                 post.setUrl(element.select("a").attr("href"));
                 post.setImg(element.select("img").attr("style").replace("background-image: url('", "").replace("')", ""));
@@ -151,7 +156,7 @@ public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
             Elements others = doc.select("div.content-box");
             for (Element element : others) {
                 post = new Post();
-                post.setUrl(element.select("a").attr("href"));
+                post.setUrl(element.select("a").get(2).attr("href"));
                 post.setImg(element.select("img").attr("data-src"));
                 post.setName(element.select("div.content-title").text());
                 set.add(post);
@@ -171,7 +176,15 @@ public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
     public void onClick(View v, int position) {
         Intent intent = new Intent(getActivity(), DetailActivity.class);
         intent.putExtra("extra_post", posts.get(position));
-        startActivity(intent);
+        intent.putExtra("extra_category", channel.getName());
 
+        String transitionName = getString(R.string.image_transition_name);
+        ImageView viewStart = (ImageView) v.findViewById(R.id.row_image);
+        ActivityOptionsCompat options =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                        viewStart,   // Starting view
+                        transitionName    // The String
+                );
+        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
     }
 }

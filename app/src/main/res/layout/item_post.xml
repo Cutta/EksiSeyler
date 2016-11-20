@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
+        android:transitionName="@string/image_transition_name"
         android:src="@mipmap/ic_launcher" />
 
     <FrameLayout
