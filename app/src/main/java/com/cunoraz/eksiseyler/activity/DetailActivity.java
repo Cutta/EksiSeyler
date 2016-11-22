@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.model.Post;
+import com.cunoraz.eksiseyler.rest.ApiClient;
 
 /**
  * Created by cuneytcarikci on 08/11/2016.
@@ -113,4 +114,11 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (webView.canGoBack())
+            webView.goBack();
+        else
+        super.onBackPressed();
+    }
 }

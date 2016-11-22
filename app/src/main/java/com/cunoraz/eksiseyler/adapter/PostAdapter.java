@@ -1,8 +1,6 @@
 package com.cunoraz.eksiseyler.adapter;
 
-import android.app.Fragment;
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +19,7 @@ import java.util.List;
 
 /**
  * Created by cuneytcarikci on 07/11/2016.
+ *
  */
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {

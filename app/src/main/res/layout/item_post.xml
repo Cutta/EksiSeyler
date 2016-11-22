@@ -14,7 +14,7 @@
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:transitionName="@string/image_transition_name"
-        android:src="@mipmap/ic_launcher" />
+        />
 
     <FrameLayout
         android:layout_width="match_parent"
