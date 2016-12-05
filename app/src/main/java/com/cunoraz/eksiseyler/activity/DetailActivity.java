@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -19,7 +20,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.model.Post;
-import com.cunoraz.eksiseyler.rest.ApiClient;
 
 /**
  * Created by cuneytcarikci on 08/11/2016.
@@ -41,16 +41,34 @@ public class DetailActivity extends AppCompatActivity {
 
     String categoryName;
 
+    String fromIntentUrl;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        post = getIntent().getExtras().getParcelable("extra_post");
-        categoryName = getIntent().getExtras().getString("extra_category");
+        webView = (WebView) findViewById(R.id.context_webview);
         image = (ImageView) findViewById(R.id.context_image);
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(categoryName);
+        actionButton = (FloatingActionButton) findViewById(R.id.ic_action_share);
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("extra_url")) {
+            fromIntentUrl = getIntent().getExtras().getString("extra_url");
+            webView.loadUrl(fromIntentUrl);
+            toolbar.setTitle("Ekşi Şeyler");
+            Log.d("URL", fromIntentUrl);
+        } else {
+            post = getIntent().getExtras().getParcelable("extra_post");
+            categoryName = getIntent().getExtras().getString("extra_category");
+            toolbar.setTitle(categoryName);
+            Glide.with(DetailActivity.this)
+                    .load(post.getImg())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(image);
+
+            webView.loadUrl(post.getUrl());
+
+        }
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -59,13 +77,7 @@ public class DetailActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        Glide.with(DetailActivity.this)
-                .load(post.getImg())
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(image);
-        actionButton = (FloatingActionButton) findViewById(R.id.ic_action_share);
-        webView = (WebView) findViewById(R.id.context_webview);
-        webView.loadUrl(post.getUrl());
+
         webView.setFocusable(true);
         webView.setFocusableInTouchMode(true);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -119,6 +131,6 @@ public class DetailActivity extends AppCompatActivity {
         if (webView.canGoBack())
             webView.goBack();
         else
-        super.onBackPressed();
+            super.onBackPressed();
     }
 }

@@ -1,6 +1,9 @@
 package com.cunoraz.eksiseyler.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,6 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.Utility.Tags;
@@ -23,12 +27,17 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private Toolbar toolbar;
+    private Uri data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
+
+        Intent intent = getIntent();
+        data = intent.getData();
 
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -66,6 +75,20 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.YEME_ICME, "YEME İÇME")), "YEME İÇME");
 
         viewPager.setAdapter(adapter);
+        if (data != null)
+            openUriFromIntent();
+    }
+
+    private void openUriFromIntent() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                intent.putExtra("extra_url", data.toString());
+                startActivity(intent);
+            }
+        }, 50);
+
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
