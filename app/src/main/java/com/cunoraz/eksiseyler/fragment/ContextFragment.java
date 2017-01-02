@@ -1,5 +1,6 @@
 package com.cunoraz.eksiseyler.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -42,7 +43,7 @@ import retrofit2.Response;
 
 public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
     private static final String TAG = ContextFragment.class.getSimpleName();
-
+    ProgressDialog progressDialog;
     RecyclerView recyclerView;
 
     HashSet<Post> set;
@@ -68,6 +69,7 @@ public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        progressDialog = new ProgressDialog(getActivity());
         if (getArguments() != null) {
             channel = getArguments().getParcelable("arg_channel");
         }
@@ -88,6 +90,9 @@ public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
 
     private void prepareList() {
 
+        progressDialog.setMessage("Lütfen bekleyin...");
+        progressDialog.show();
+
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
@@ -100,7 +105,8 @@ public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
                     parseCategory(response);
                 else if (channel.getUrlName().startsWith("kanal"))
                     parseChannel(response);
-
+                if (getActivity() != null)
+                progressDialog.dismiss();
 
             }
 
