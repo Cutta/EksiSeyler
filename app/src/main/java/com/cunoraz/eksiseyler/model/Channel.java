@@ -9,8 +9,8 @@ import android.os.Parcelable;
 
 public class Channel implements Parcelable {
 
-    String urlName;
-    String name;
+    private String urlName;
+    private String name;
 
     public Channel(String urlName, String name) {
         this.urlName = urlName;
@@ -44,7 +44,7 @@ public class Channel implements Parcelable {
         dest.writeString(this.name);
     }
 
-    protected Channel(Parcel in) {
+    private Channel(Parcel in) {
         this.urlName = in.readString();
         this.name = in.readString();
     }

@@ -5,14 +5,13 @@ import android.os.Parcelable;
 
 /**
  * Created by cuneytcarikci on 07/11/2016.
- *
  */
 
 public class Post implements Parcelable {
 
-    String url;
-    String img;
-    String name;
+    private String url;
+    private String img;
+    private String name;
 
     public String getUrl() {
         return url;
@@ -53,7 +52,7 @@ public class Post implements Parcelable {
     public Post() {
     }
 
-    protected Post(Parcel in) {
+    private Post(Parcel in) {
         this.url = in.readString();
         this.img = in.readString();
         this.name = in.readString();

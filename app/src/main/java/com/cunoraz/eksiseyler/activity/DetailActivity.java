@@ -5,20 +5,27 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cunoraz.eksiseyler.R;
+import com.cunoraz.eksiseyler.Utility.SharedPrefManager;
 import com.cunoraz.eksiseyler.model.Post;
 
 /**
@@ -29,8 +36,10 @@ import com.cunoraz.eksiseyler.model.Post;
 
 public class DetailActivity extends AppCompatActivity {
     private static final String TAG = DetailActivity.class.getSimpleName();
+    public static final String IMAGE_SHOW = "showImage";
     Post post;
 
+    SharedPrefManager manager;
     ImageView image;
     WebView webView;
     NestedScrollView nestedScrollView;
@@ -43,10 +52,16 @@ public class DetailActivity extends AppCompatActivity {
 
     String fromIntentUrl;
 
+    boolean showImage = true;
+    private Menu menu;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        manager = new SharedPrefManager(DetailActivity.this);
+        showImage = manager.getBoolean(IMAGE_SHOW);
+
         webView = (WebView) findViewById(R.id.context_webview);
         image = (ImageView) findViewById(R.id.context_image);
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
@@ -70,7 +85,8 @@ public class DetailActivity extends AppCompatActivity {
 
         }
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,9 +103,8 @@ public class DetailActivity extends AppCompatActivity {
         webView.getSettings().setDatabaseEnabled(true);
         webView.getSettings().setAppCacheEnabled(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-
         webView.setWebChromeClient(new WebChromeClient());
-
+        webView.getSettings().setLoadsImagesAutomatically(showImage);
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
@@ -124,6 +139,51 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_detail_activity, menu);
+        this.menu = menu;
+        if (showImage)
+            menu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.mipmap.ic_photo_white_24dp));
+        else
+            menu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.mipmap.ic_photo_gray_24dp));
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.ic_menu_show_image:
+                if (showImage) {
+                    AlertDialog dialog = new AlertDialog.Builder(DetailActivity.this)
+                            .setTitle("\u2713 " + "Tasarruf Modu Etkin")
+                            .setMessage("Bundan sonraki içerik görüntülemenizde, resimler yüklenmez ve data paketinizden tasarruf edersiniz.")
+                            .setPositiveButton("Tamam", null)
+                            .create();
+                    dialog.show();
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.mipmap.ic_photo_gray_24dp));
+                } else {
+                    AlertDialog dialog = new AlertDialog.Builder(DetailActivity.this)
+                            .setTitle("Tasarruf Modu Devredışı")
+                            .setMessage("Bundan sonraki içerik görüntülemenizde, resimleri görebilirsiniz.")
+                            .setPositiveButton("Tamam", null)
+                            .create();
+                    dialog.show();
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.mipmap.ic_photo_white_24dp));
+
+                }
+                manager.saveBoolean(IMAGE_SHOW,!showImage);
+                webView.getSettings().setLoadsImagesAutomatically(!showImage);
+                showImage = !showImage;
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
