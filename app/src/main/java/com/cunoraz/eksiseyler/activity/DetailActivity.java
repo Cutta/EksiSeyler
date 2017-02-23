@@ -2,6 +2,7 @@ package com.cunoraz.eksiseyler.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -27,6 +28,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.Utility.SharedPrefManager;
 import com.cunoraz.eksiseyler.model.Post;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 /**
  * Created by cuneytcarikci on 08/11/2016.
@@ -60,7 +64,6 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         manager = new SharedPrefManager(DetailActivity.this);
-        showImage = manager.getBoolean(IMAGE_SHOW);
 
         webView = (WebView) findViewById(R.id.context_webview);
         image = (ImageView) findViewById(R.id.context_image);
@@ -71,7 +74,6 @@ public class DetailActivity extends AppCompatActivity {
             fromIntentUrl = getIntent().getExtras().getString("extra_url");
             webView.loadUrl(fromIntentUrl);
             toolbar.setTitle("Ekşi Şeyler");
-            Log.d("URL", fromIntentUrl);
         } else {
             post = getIntent().getExtras().getParcelable("extra_post");
             categoryName = getIntent().getExtras().getString("extra_category");
@@ -84,6 +86,7 @@ public class DetailActivity extends AppCompatActivity {
             webView.loadUrl(post.getUrl());
 
         }
+        showImage = getIntent().getExtras().getBoolean("show_image");
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -133,12 +136,17 @@ public class DetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, post.getUrl());
+                if (fromIntentUrl != null)
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, fromIntentUrl);
+                else
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, post.getUrl());
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }
         });
 
+
+        //   openFromJsoup();
     }
 
     @Override
@@ -177,7 +185,7 @@ public class DetailActivity extends AppCompatActivity {
                     menu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.mipmap.ic_photo_white_24dp));
 
                 }
-                manager.saveBoolean(IMAGE_SHOW,!showImage);
+                manager.saveBoolean(IMAGE_SHOW, !showImage);
                 webView.getSettings().setLoadsImagesAutomatically(!showImage);
                 showImage = !showImage;
                 return true;
@@ -192,5 +200,31 @@ public class DetailActivity extends AppCompatActivity {
             webView.goBack();
         else
             super.onBackPressed();
+    }
+
+    private void openFromJsoup() {
+
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                try {
+                    Document doc = Jsoup.connect("https://seyler.eksisozluk.com/rus-kizlari-neden-bu-kadar-guzel").get();
+                    doc.head().getElementsByTag("link").remove();
+                    //doc.head().appendElement("link").attr("rel", "stylesheet").attr("type", "text/css").attr("href", "style.css");
+                    return doc.outerHtml();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String htmldata) {
+                super.onPostExecute(htmldata);
+                webView.loadDataWithBaseURL("file:///android_asset/.", htmldata, "text/html", "UTF-8", null);
+            }
+        }.execute();
+
+
     }
 }
