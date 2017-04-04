@@ -3,6 +3,7 @@ package com.cunoraz.eksiseyler.adapter;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaderFactory;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.fragment.ContextFragment;
 import com.cunoraz.eksiseyler.model.Post;
@@ -63,12 +67,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         return new MyViewHolder(itemView);
     }
 
-    @Override
+    @Override//new LazyHeaders.Builder().addHeader("referer","https://seyler.eksisozluk.com/")
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Post item = itemList.get(position);
         holder.text.setText(item.getName());
+        if (item.getImg().equals(""))
+            return;
+        GlideUrl glideUrl = new GlideUrl(item.getImg(), new LazyHeaders.Builder()
+                .addHeader("referer", new LazyHeaderFactory() {
+                    @Override
+                    public String buildHeader() {
+                        return "https://seyler.eksisozluk.com/";
+                    }
+                })
+                .build());
+
         Glide.with(context).
-                load(item.getImg())
+                load(glideUrl)
                 .diskCacheStrategy( DiskCacheStrategy.RESULT )
                 .into(holder.image);
         holder.cardView.setOnClickListener(new View.OnClickListener() {

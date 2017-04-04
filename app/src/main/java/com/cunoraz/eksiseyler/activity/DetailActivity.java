@@ -25,6 +25,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaderFactory;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.Utility.SharedPrefManager;
 import com.cunoraz.eksiseyler.model.Post;
@@ -78,8 +81,17 @@ public class DetailActivity extends AppCompatActivity {
             post = getIntent().getExtras().getParcelable("extra_post");
             categoryName = getIntent().getExtras().getString("extra_category");
             toolbar.setTitle(categoryName);
+            GlideUrl glideUrl = new GlideUrl(post.getImg(), new LazyHeaders.Builder()
+                    .addHeader("referer", new LazyHeaderFactory() {
+                        @Override
+                        public String buildHeader() {
+                            return "https://seyler.eksisozluk.com/";
+                        }
+                    })
+                    .build());
+
             Glide.with(DetailActivity.this)
-                    .load(post.getImg())
+                    .load(glideUrl)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image);
 

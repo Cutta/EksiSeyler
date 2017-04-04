@@ -124,6 +124,7 @@ public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
                 post.setUrl(element.select("a").attr("href"));
                 post.setImg(element.select("img").attr("src"));
                 post.setName(element.select("div.mashup-title").text());
+                if (!post.getImg().equals(""))
                 set.add(post);
             }
             posts = new ArrayList<>();
