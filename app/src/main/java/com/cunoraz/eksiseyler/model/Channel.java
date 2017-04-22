@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 /**
  * Created by cuneytcarikci on 08/11/2016.
+ *
  */
 
 public class Channel implements Parcelable {

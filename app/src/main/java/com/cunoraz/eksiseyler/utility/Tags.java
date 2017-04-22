@@ -1,7 +1,8 @@
-package com.cunoraz.eksiseyler.Utility;
+package com.cunoraz.eksiseyler.utility;
 
 /**
  * Created by cuneytcarikci on 07/11/2016.
+ *
  */
 
 public class Tags {

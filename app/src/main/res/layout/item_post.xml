@@ -7,30 +7,28 @@
     android:orientation="vertical">
 
 
-    <ImageView
-        android:id="@+id/row_image"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:transitionName="@string/image_transition_name"
-        />
+        android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/background_gallery_feather" />
+        <ImageView
+            android:id="@+id/row_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:transitionName="@string/image_transition_name" />
 
-    <TextView
-        android:id="@+id/row_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        android:layout_margin="6dp"
-        android:ellipsize="end"
-        android:maxLines="3"
-        android:text=" TEXT \n TEXT \n TEXT"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:textColor="@android:color/white" />
+        <TextView
+            android:id="@+id/row_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="6dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text=" TEXT \n TEXT \n TEXT"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@color/title_color" />
+    </LinearLayout>
 </android.support.v7.widget.CardView>

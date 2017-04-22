@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +15,6 @@ import android.widget.ImageView;
 
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.activity.DetailActivity;
-import com.cunoraz.eksiseyler.activity.MainActivity;
 import com.cunoraz.eksiseyler.adapter.PostAdapter;
 import com.cunoraz.eksiseyler.model.Channel;
 import com.cunoraz.eksiseyler.model.Post;
@@ -38,18 +37,15 @@ import retrofit2.Response;
 
 /**
  * Created by cuneytcarikci on 07/11/2016.
- *
  */
 
 public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
+
     private static final String TAG = ContextFragment.class.getSimpleName();
     RecyclerView recyclerView;
-
     HashSet<Post> set;
     List<Post> posts;
-
     PostAdapter adapter;
-
     Channel channel;
 
     public static ContextFragment newInstance(Channel channel) {
@@ -68,7 +64,6 @@ public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-     //   progressDialog = new ProgressDialog(getActivity());
         if (getArguments() != null) {
             channel = getArguments().getParcelable("arg_channel");
         }
@@ -78,10 +73,12 @@ public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_one, container, false);
+        View view = inflater.inflate(R.layout.fragment_context, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        recyclerView.setLayoutManager(mLayoutManager);
+
         prepareList();
 
         return view;
@@ -89,10 +86,7 @@ public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
 
     private void prepareList() {
 
-
-        ApiInterface apiService =
-                ApiClient.getClient().create(ApiInterface.class);
-
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<ResponseBody> call = apiService.getSiteContent(channel.getUrlName());
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -124,12 +118,11 @@ public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
                 post.setUrl(element.select("a").attr("href"));
                 post.setImg(element.select("img").attr("src"));
                 post.setName(element.select("div.mashup-title").text());
-                if (!post.getImg().equals(""))
-                set.add(post);
+                if (post.getName() != null && !post.getName().equals(""))
+                    set.add(post);
             }
             posts = new ArrayList<>();
             posts.addAll(set);
-
             adapter = new PostAdapter(ContextFragment.this, posts);
             recyclerView.setAdapter(adapter);
         } catch (IOException e) {
@@ -151,6 +144,7 @@ public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
                 post.setUrl(element.select("a").attr("href"));
                 post.setImg(element.select("img").attr("style").replace("background-image: url('", "").replace("')", ""));
                 post.setName(element.select("span").text());
+                if (post.getName() != null && !post.getName().equals(""))
                 set.add(post);
             }
             Elements others = doc.select("div.content-box");
@@ -159,6 +153,7 @@ public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
                 post.setUrl(element.select("a").get(2).attr("href"));
                 post.setImg(element.select("img").attr("data-src"));
                 post.setName(element.select("div.content-title").text());
+                if (post.getName() != null && !post.getName().equals(""))
                 set.add(post);
             }
             posts = new ArrayList<>();
@@ -177,7 +172,6 @@ public class ContextFragment extends Fragment implements PostAdapter.ItemClick {
         Intent intent = new Intent(getActivity(), DetailActivity.class);
         intent.putExtra("extra_post", posts.get(position));
         intent.putExtra("extra_category", channel.getName());
-        intent.putExtra("show_image",((MainActivity)getActivity()).getShowImage());
 
         String transitionName = getString(R.string.image_transition_name);
         ImageView viewStart = (ImageView) v.findViewById(R.id.row_image);

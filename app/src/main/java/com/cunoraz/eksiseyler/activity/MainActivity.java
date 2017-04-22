@@ -23,8 +23,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.cunoraz.eksiseyler.R;
-import com.cunoraz.eksiseyler.Utility.SharedPrefManager;
-import com.cunoraz.eksiseyler.Utility.Tags;
+import com.cunoraz.eksiseyler.utility.AppSettings;
+import com.cunoraz.eksiseyler.utility.SharedPrefManager;
+import com.cunoraz.eksiseyler.utility.Tags;
 import com.cunoraz.eksiseyler.app.MyApplication;
 import com.cunoraz.eksiseyler.fragment.ContextFragment;
 import com.cunoraz.eksiseyler.model.Channel;
@@ -41,15 +42,15 @@ public class MainActivity extends AppCompatActivity {
     private Uri data;
     boolean showImage = true;
     private Menu menu;
-    SharedPrefManager manager;
+    AppSettings sharedPrefManager;
     public static final String IMAGE_SHOW = "showImage";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        manager = new SharedPrefManager(MainActivity.this);
-        showImage = manager.getBoolean(IMAGE_SHOW);
+        sharedPrefManager = ((MyApplication) getApplication()).getSharedPrefManager();
+        showImage = sharedPrefManager.getBoolean(IMAGE_SHOW);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
@@ -68,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 viewPager.setCurrentItem(i);
-                Log.d("onItemSelected", "onItemSelected: ");
             }
 
             @Override
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 spinner.setSelection(position);
-                Log.d("onPageSelected", "onPageSelected: ");
             }
 
             @Override
@@ -124,14 +123,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_detail_activity, menu);
+        inflater.inflate(R.menu.menu_main_activity, menu);
         this.menu = menu;
         if (showImage)
-            menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.mipmap.ic_photo_white_24dp));
+            menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_photo_white_24dp));
         else
-            menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.mipmap.ic_photo_gray_24dp));
+            menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_photo_gray_24dp));
 
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (sharedPrefManager != null && menu != null) {
+            showImage = sharedPrefManager.getBoolean(IMAGE_SHOW);
+            if (showImage)
+                menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_photo_white_24dp));
+            else
+                menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_photo_gray_24dp));
+        }
     }
 
     @Override
@@ -146,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                             .setPositiveButton("Tamam", null)
                             .create();
                     dialog.show();
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.mipmap.ic_photo_gray_24dp));
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_photo_gray_24dp));
                 } else {
                     AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
                             .setTitle("Tasarruf Modu Devredışı")
@@ -154,11 +165,14 @@ public class MainActivity extends AppCompatActivity {
                             .setPositiveButton("Tamam", null)
                             .create();
                     dialog.show();
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.mipmap.ic_photo_white_24dp));
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_photo_white_24dp));
 
                 }
                 showImage = !showImage;
-                manager.saveBoolean(IMAGE_SHOW, showImage);
+                sharedPrefManager.saveBoolean(IMAGE_SHOW, showImage);
+                return true;
+            case R.id.ic_menu_show_bookmark_list:
+                startActivity(new Intent(MainActivity.this, BookMarkListActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -244,7 +258,4 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public boolean getShowImage() {
-        return showImage;
-    }
 }

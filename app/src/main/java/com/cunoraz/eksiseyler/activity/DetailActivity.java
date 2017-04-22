@@ -2,16 +2,16 @@ package com.cunoraz.eksiseyler.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +21,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -29,11 +28,10 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaderFactory;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.cunoraz.eksiseyler.R;
-import com.cunoraz.eksiseyler.Utility.SharedPrefManager;
+import com.cunoraz.eksiseyler.app.MyApplication;
+import com.cunoraz.eksiseyler.utility.AppSettings;
+import com.cunoraz.eksiseyler.utility.SharedPrefManager;
 import com.cunoraz.eksiseyler.model.Post;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 /**
  * Created by cuneytcarikci on 08/11/2016.
@@ -43,34 +41,33 @@ import org.jsoup.nodes.Document;
 
 public class DetailActivity extends AppCompatActivity {
     private static final String TAG = DetailActivity.class.getSimpleName();
-    public static final String IMAGE_SHOW = "showImage";
     Post post;
 
-    SharedPrefManager manager;
+    AppSettings manager;
     ImageView image;
     WebView webView;
     NestedScrollView nestedScrollView;
-
     FloatingActionButton actionButton;
-
+    CoordinatorLayout rootLayout;
     Toolbar toolbar;
-
     String categoryName;
-
     String fromIntentUrl;
 
     boolean showImage = true;
     private Menu menu;
 
+    private boolean isBookmarked = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        manager = new SharedPrefManager(DetailActivity.this);
+        manager = ((MyApplication)getApplication()).getSharedPrefManager();
 
         webView = (WebView) findViewById(R.id.context_webview);
         image = (ImageView) findViewById(R.id.context_image);
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
+        rootLayout = (CoordinatorLayout) findViewById(R.id.root_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         actionButton = (FloatingActionButton) findViewById(R.id.ic_action_share);
         if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("extra_url")) {
@@ -98,7 +95,8 @@ public class DetailActivity extends AppCompatActivity {
             webView.loadUrl(post.getUrl());
 
         }
-        showImage = getIntent().getExtras().getBoolean("show_image");
+
+        showImage = manager.getBoolean(MainActivity.IMAGE_SHOW);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -157,19 +155,25 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+        isBookmarked = manager.isBookmarked(post);
 
-        //   openFromJsoup();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_detail_activity, menu);
+
         this.menu = menu;
         if (showImage)
-            menu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.mipmap.ic_photo_white_24dp));
+            menu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.drawable.ic_photo_white_24dp));
         else
-            menu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.mipmap.ic_photo_gray_24dp));
+            menu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.drawable.ic_photo_gray_24dp));
+
+        if (isBookmarked)
+            menu.getItem(1).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.drawable.ic_bookmarked));
+        else
+            menu.getItem(1).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.drawable.ic_non_bookmarked));
 
         return true;
     }
@@ -186,7 +190,7 @@ public class DetailActivity extends AppCompatActivity {
                             .setPositiveButton("Tamam", null)
                             .create();
                     dialog.show();
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.mipmap.ic_photo_gray_24dp));
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.drawable.ic_photo_gray_24dp));
                 } else {
                     AlertDialog dialog = new AlertDialog.Builder(DetailActivity.this)
                             .setTitle("Tasarruf Modu Devredışı")
@@ -194,13 +198,27 @@ public class DetailActivity extends AppCompatActivity {
                             .setPositiveButton("Tamam", null)
                             .create();
                     dialog.show();
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.mipmap.ic_photo_white_24dp));
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.drawable.ic_photo_white_24dp));
 
                 }
-                manager.saveBoolean(IMAGE_SHOW, !showImage);
+                manager.saveBoolean(MainActivity.IMAGE_SHOW, !showImage);
                 webView.getSettings().setLoadsImagesAutomatically(!showImage);
                 showImage = !showImage;
                 return true;
+            case R.id.ic_menu_save_content:
+              /*  webView.saveWebArchive(getFilesDir() + File.separator + post.getUrl() + ".xml");*/
+                isBookmarked = !isBookmarked;
+                if (!isBookmarked) {
+                    manager.deletePost(post);
+                    Snackbar.make(rootLayout, "Favorilerden silindi!", Snackbar.LENGTH_SHORT).show();
+                    menu.getItem(1).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.drawable.ic_non_bookmarked));
+                } else {
+                    manager.savePost(post);
+                    Snackbar.make(rootLayout, "Favorilere eklendi.", Snackbar.LENGTH_SHORT).show();
+                    menu.getItem(1).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.drawable.ic_bookmarked));
+                }
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -212,31 +230,5 @@ public class DetailActivity extends AppCompatActivity {
             webView.goBack();
         else
             super.onBackPressed();
-    }
-
-    private void openFromJsoup() {
-
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... voids) {
-                try {
-                    Document doc = Jsoup.connect("https://seyler.eksisozluk.com/rus-kizlari-neden-bu-kadar-guzel").get();
-                    doc.head().getElementsByTag("link").remove();
-                    //doc.head().appendElement("link").attr("rel", "stylesheet").attr("type", "text/css").attr("href", "style.css");
-                    return doc.outerHtml();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(String htmldata) {
-                super.onPostExecute(htmldata);
-                webView.loadDataWithBaseURL("file:///android_asset/.", htmldata, "text/html", "UTF-8", null);
-            }
-        }.execute();
-
-
     }
 }

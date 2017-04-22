@@ -3,7 +3,6 @@ package com.cunoraz.eksiseyler.adapter;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +15,15 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaderFactory;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.cunoraz.eksiseyler.R;
+import com.cunoraz.eksiseyler.activity.BookMarkListActivity;
 import com.cunoraz.eksiseyler.fragment.ContextFragment;
 import com.cunoraz.eksiseyler.model.Post;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by cuneytcarikci on 07/11/2016.
- *
  */
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
@@ -35,6 +35,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
     private Context context;
 
     private ContextFragment fragment;
+
+    private BookMarkListActivity activity;
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView text;
@@ -50,10 +52,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
     }
 
 
-    public PostAdapter(ContextFragment fragment,List<Post> itemList) {
+    public void resetAdapter(){
+        this.itemList = new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
+    public PostAdapter(ContextFragment fragment, List<Post> itemList) {
         this.fragment = fragment;
         this.itemList = itemList;
     }
+
+    public PostAdapter(BookMarkListActivity activity, List<Post> itemList) {
+        this.activity = activity;
+        this.itemList = itemList;
+    }
+
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -62,7 +75,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_post, parent, false);
         context = parent.getContext();
-        itemClick = fragment;
+
+        if (fragment != null)
+            itemClick = fragment;
+        else if (activity != null)
+            itemClick = activity;
 
         return new MyViewHolder(itemView);
     }
@@ -84,7 +101,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
         Glide.with(context).
                 load(glideUrl)
-                .diskCacheStrategy( DiskCacheStrategy.RESULT )
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(holder.image);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

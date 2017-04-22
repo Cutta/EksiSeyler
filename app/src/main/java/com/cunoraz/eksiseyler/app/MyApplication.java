@@ -2,16 +2,22 @@ package com.cunoraz.eksiseyler.app;
 
 /**
  * Created by cuneytcarikci on 20/11/2016.
- *
  */
 
 import java.io.File;
 
 import android.app.Application;
 
+import com.cunoraz.eksiseyler.utility.AppSettings;
+import com.cunoraz.eksiseyler.utility.SharedPrefManager;
+
 public class MyApplication extends Application {
 
     private static MyApplication instance;
+
+    //private SharedPrefManager manager;
+
+    private AppSettings appSettings;
 
     @Override
     public void onCreate() {
@@ -50,5 +56,12 @@ public class MyApplication extends Application {
         }
 
         return deletedAll;
+    }
+
+    public synchronized AppSettings getSharedPrefManager() {
+        if (appSettings == null)
+            appSettings = AppSettings.getInstance();
+
+        return appSettings;
     }
 }

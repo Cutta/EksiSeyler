@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 /**
  * Created by cuneytcarikci on 07/11/2016.
+ *
  */
 
 public class Post implements Parcelable {
@@ -40,6 +41,27 @@ public class Post implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Post post = (Post) o;
+
+        if (url != null ? !url.equals(post.url) : post.url != null) return false;
+        if (img != null ? !img.equals(post.img) : post.img != null) return false;
+        return name != null ? name.equals(post.name) : post.name == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = url != null ? url.hashCode() : 0;
+        result = 31 * result + (img != null ? img.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
     }
 
     @Override

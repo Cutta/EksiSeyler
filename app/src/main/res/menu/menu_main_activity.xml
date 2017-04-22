@@ -9,9 +9,9 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/ic_menu_save_content"
-        android:icon="@drawable/ic_non_bookmarked"
-        android:title="Favorilere Ekle"
+        android:id="@+id/ic_menu_show_bookmark_list"
+        android:icon="@drawable/ic_bookmark_list"
+        android:title="Favorileri Göster"
         app:showAsAction="always" />
 
 </menu>
