@@ -31,6 +31,8 @@ public class Post implements Parcelable {
     }
 
     public String getName() {
+        if (name == null)
+            name = "Ekşi Şeyler";
         return name;
     }
 

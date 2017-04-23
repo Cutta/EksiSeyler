@@ -21,6 +21,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -61,7 +62,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        manager = ((MyApplication)getApplication()).getSharedPrefManager();
+        manager = ((MyApplication) getApplication()).getSharedPrefManager();
 
         webView = (WebView) findViewById(R.id.context_webview);
         image = (ImageView) findViewById(R.id.context_image);
@@ -71,8 +72,11 @@ public class DetailActivity extends AppCompatActivity {
         actionButton = (FloatingActionButton) findViewById(R.id.ic_action_share);
         if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("extra_url")) {
             fromIntentUrl = getIntent().getExtras().getString("extra_url");
+            post = new Post();
+            post.setName("Ekşi Şeyler");
+            post.setImg("");
+            post.setUrl(fromIntentUrl);
             webView.loadUrl(fromIntentUrl);
-            toolbar.setTitle("Ekşi Şeyler");
         } else {
             post = getIntent().getExtras().getParcelable("extra_post");
             categoryName = getIntent().getExtras().getString("extra_category");
@@ -145,10 +149,7 @@ public class DetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                if (fromIntentUrl != null)
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, fromIntentUrl);
-                else
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, post.getUrl());
+                sendIntent.putExtra(Intent.EXTRA_TEXT, post.getUrl());
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }
@@ -212,9 +213,13 @@ public class DetailActivity extends AppCompatActivity {
                     Snackbar.make(rootLayout, "Favorilerden silindi!", Snackbar.LENGTH_SHORT).show();
                     menu.getItem(1).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.drawable.ic_non_bookmarked));
                 } else {
-                    manager.savePost(post);
-                    Snackbar.make(rootLayout, "Favorilere eklendi.", Snackbar.LENGTH_SHORT).show();
-                    menu.getItem(1).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.drawable.ic_bookmarked));
+                    if (post.getImg() != null && !post.getImg().equals("")) {
+                        manager.savePost(post);
+                        Snackbar.make(rootLayout, "Favorilere eklendi.", Snackbar.LENGTH_SHORT).show();
+                        menu.getItem(1).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.drawable.ic_bookmarked));
+                    } else {
+                        Toast.makeText(this, "Favorilere eklenemedi, lütfen daha sonra tekrar deneyin!", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 return true;
 
