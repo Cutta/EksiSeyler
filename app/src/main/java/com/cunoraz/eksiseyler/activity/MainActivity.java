@@ -13,7 +13,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,7 +23,6 @@ import android.widget.Spinner;
 
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.utility.AppSettings;
-import com.cunoraz.eksiseyler.utility.SharedPrefManager;
 import com.cunoraz.eksiseyler.utility.Tags;
 import com.cunoraz.eksiseyler.app.MyApplication;
 import com.cunoraz.eksiseyler.fragment.ContextFragment;
@@ -250,12 +248,6 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        MyApplication.getInstance().clearApplicationData();
-        super.onBackPressed();
     }
 
 }

@@ -30,7 +30,6 @@ import com.bumptech.glide.load.model.LazyHeaders;
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.app.MyApplication;
 import com.cunoraz.eksiseyler.utility.AppSettings;
-import com.cunoraz.eksiseyler.utility.SharedPrefManager;
 import com.cunoraz.eksiseyler.model.Post;
 
 /**

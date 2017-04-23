@@ -18,7 +18,6 @@ import com.cunoraz.eksiseyler.adapter.PostAdapter;
 import com.cunoraz.eksiseyler.app.MyApplication;
 import com.cunoraz.eksiseyler.model.Post;
 import com.cunoraz.eksiseyler.utility.AppSettings;
-import com.cunoraz.eksiseyler.utility.SharedPrefManager;
 
 import java.util.List;
 
