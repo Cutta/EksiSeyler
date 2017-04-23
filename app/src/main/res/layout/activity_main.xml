@@ -16,10 +16,11 @@
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-            <Spinner
+            <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/spinner_nav"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:popupBackground="@color/title_color" />
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout

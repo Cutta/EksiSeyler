@@ -102,6 +102,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         Glide.with(context).
                 load(glideUrl)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .placeholder(R.drawable.placeholder)
+                .crossFade()
                 .into(holder.image);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
