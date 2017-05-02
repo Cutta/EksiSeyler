@@ -29,7 +29,6 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaderFactory;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.cunoraz.eksiseyler.R;
-import com.cunoraz.eksiseyler.app.MyApplication;
 import com.cunoraz.eksiseyler.utility.AppSettings;
 import com.cunoraz.eksiseyler.model.Post;
 
@@ -62,7 +61,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        manager = ((MyApplication) getApplication()).getSharedPrefManager();
+        //manager = ((EksiSeylerApp) getApplication()).getSharedPrefManager();
 
         webView = (WebView) findViewById(R.id.context_webview);
         image = (ImageView) findViewById(R.id.context_image);

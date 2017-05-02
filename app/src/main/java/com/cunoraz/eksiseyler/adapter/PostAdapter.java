@@ -16,7 +16,7 @@ import com.bumptech.glide.load.model.LazyHeaderFactory;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.activity.BookMarkListActivity;
-import com.cunoraz.eksiseyler.fragment.ContextFragment;
+import com.cunoraz.eksiseyler.fragment.ContentFragment;
 import com.cunoraz.eksiseyler.model.Post;
 
 import java.util.ArrayList;
@@ -28,13 +28,13 @@ import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
 
-    private List<Post> itemList;
+    private List<Post> postList;
 
     private ItemClick itemClick;
 
     private Context context;
 
-    private ContextFragment fragment;
+    private ContentFragment fragment;
 
     private BookMarkListActivity activity;
 
@@ -51,20 +51,25 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         }
     }
 
+    public void updatePosts(ArrayList<Post> posts) {
+        this.postList = posts;
+        notifyDataSetChanged();
 
-    public void resetAdapter(){
-        this.itemList = new ArrayList<>();
+    }
+
+    public void resetAdapter() {
+        this.postList = new ArrayList<>();
         notifyDataSetChanged();
     }
 
-    public PostAdapter(ContextFragment fragment, List<Post> itemList) {
+    public PostAdapter(ContentFragment fragment, List<Post> postList) {
         this.fragment = fragment;
-        this.itemList = itemList;
+        this.postList = postList;
     }
 
-    public PostAdapter(BookMarkListActivity activity, List<Post> itemList) {
+    public PostAdapter(BookMarkListActivity activity, List<Post> postList) {
         this.activity = activity;
-        this.itemList = itemList;
+        this.postList = postList;
     }
 
 
@@ -86,7 +91,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
     @Override//new LazyHeaders.Builder().addHeader("referer","https://seyler.eksisozluk.com/")
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Post item = itemList.get(position);
+        Post item = postList.get(position);
         holder.text.setText(item.getName());
         if (item.getImg().equals(""))
             return;
@@ -115,7 +120,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return postList.size();
     }
 
     public interface ItemClick {

@@ -3,7 +3,6 @@ package com.cunoraz.eksiseyler.utility;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.cunoraz.eksiseyler.app.MyApplication;
 import com.cunoraz.eksiseyler.model.Post;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -24,7 +23,7 @@ public class AppSettings {
     public static synchronized AppSettings getInstance() {
 
         if (INSTANCE == null) {
-            INSTANCE = new AppSettings(MyApplication.getInstance());
+          //  INSTANCE = new AppSettings(EksiSeylerApp.getInstance());
             gson = new Gson();
         }
 

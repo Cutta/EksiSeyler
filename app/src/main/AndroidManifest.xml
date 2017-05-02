@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".app.MyApplication"
+        android:name=".app.EksiSeylerApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.DetailActivity" />
-        <activity android:name=".activity.BookMarkListActivity" >
+        <activity android:name=".activity.BookMarkListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
@@ -38,8 +38,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="1212433c452902169ec747e133fd0fcbdb330e2b"
-            />
+            android:value="1212433c452902169ec747e133fd0fcbdb330e2b" />
 
     </application>
 

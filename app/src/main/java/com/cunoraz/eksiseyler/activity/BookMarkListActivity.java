@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.adapter.PostAdapter;
-import com.cunoraz.eksiseyler.app.MyApplication;
 import com.cunoraz.eksiseyler.model.Post;
 import com.cunoraz.eksiseyler.utility.AppSettings;
 
@@ -38,7 +37,7 @@ public class BookMarkListActivity extends AppCompatActivity implements PostAdapt
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmark_list);
-        manager = ((MyApplication) getApplication()).getSharedPrefManager();
+       // manager = ((EksiSeylerApp) getApplication()).getSharedPrefManager();
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         emptyListText = (TextView) findViewById(R.id.empty_list_text);

@@ -6,10 +6,9 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 
-public interface ApiInterface {
-
+public interface RetrofitInterface {
 
     @GET("{kanal}")
-    Call<ResponseBody> getSiteContent(@Path("kanal") String channel);
+    Call<ResponseBody> getPostList(@Path("kanal") String channel);
 
 }
