@@ -10,7 +10,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +32,7 @@ import com.cunoraz.eksiseyler.di.detail.DaggerDetailComponent;
 import com.cunoraz.eksiseyler.di.detail.DetailModule;
 import com.cunoraz.eksiseyler.model.rest.entity.Post;
 import com.cunoraz.eksiseyler.ui.base.BaseActivity;
+import com.cunoraz.eksiseyler.util.DialogBuilder;
 
 import javax.inject.Inject;
 
@@ -181,7 +181,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         }
     }
 
-    private void setupFloatingActionButton() {
+    private void setupFloatingActionButton() {//// TODO: 03/05/2017 direk kendi cagirabilmeli mi?
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -266,31 +266,22 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
 
     @Override
     public void showSavingModeActiveDialog() {
-        AlertDialog dialog = new AlertDialog.Builder(DetailActivity.this)
-                .setTitle("\u2713 " + "Tasarruf Modu Etkin")
-                .setMessage("Bundan sonraki içerik görüntülemenizde, resimler yüklenmez ve data paketinizden tasarruf edersiniz.")
-                .setPositiveButton("Tamam", null)
-                .create();
-        dialog.show();
+
+        DialogBuilder.infoDialog(DetailActivity.this,
+                R.string.dialog_title_saving_mode_active,
+                R.string.dialog_message_saving_mode_active)
+                .show();
+
     }
 
     @Override
     public void showSavingModeNotActiveDialog() {
-        AlertDialog dialog = new AlertDialog.Builder(DetailActivity.this)
-                .setTitle("Tasarruf Modu Devredışı")
-                .setMessage("Bundan sonraki içerik görüntülemenizde, resimleri görebilirsiniz.")
-                .setPositiveButton("Tamam", null)
-                .create();
-        dialog.show();
+        DialogBuilder.infoDialog(DetailActivity.this,
+                R.string.dialog_title_saving_mode_passive,
+                R.string.dialog_message_saving_mode_passive)
+                .show();
     }
 
-    @Override
-    public void updateSavingModeMenuItem(boolean isActive) {
-        if (isActive)
-            mMenu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.drawable.ic_photo_gray_24dp));
-        else
-            mMenu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.drawable.ic_photo_white_24dp));
-    }
 
     @Override
     public void showAddedToFavourites() {
@@ -300,6 +291,14 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     @Override
     public void showRemovedFromFavourites() {
         Snackbar.make(rootLayout, "Favorilerden silindi!", Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updateSavingModeMenuItem(boolean isActive) {
+        if (isActive)
+            mMenu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.drawable.ic_photo_gray_24dp));
+        else
+            mMenu.getItem(0).setIcon(ContextCompat.getDrawable(DetailActivity.this, R.drawable.ic_photo_white_24dp));
     }
 
     @Override

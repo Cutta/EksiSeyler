@@ -10,8 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,75 +20,56 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.cunoraz.eksiseyler.R;
-import com.cunoraz.eksiseyler.ui.favourites.BookMarkListActivity;
-import com.cunoraz.eksiseyler.ui.detail.DetailActivity;
-import com.cunoraz.eksiseyler.ui.content.ContentFragment;
-import com.cunoraz.eksiseyler.util.AppSettings;
-import com.cunoraz.eksiseyler.model.rest.entity.Tags;
+import com.cunoraz.eksiseyler.di.main.DaggerMainComponent;
+import com.cunoraz.eksiseyler.di.main.MainModule;
 import com.cunoraz.eksiseyler.model.rest.entity.Channel;
+import com.cunoraz.eksiseyler.model.rest.entity.Tags;
+import com.cunoraz.eksiseyler.ui.base.BaseActivity;
+import com.cunoraz.eksiseyler.ui.content.ContentFragment;
+import com.cunoraz.eksiseyler.ui.detail.DetailActivity;
+import com.cunoraz.eksiseyler.ui.favourites.BookMarkListActivity;
+import com.cunoraz.eksiseyler.util.DialogBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import javax.inject.Inject;
 
-    private Spinner spinner;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private Toolbar toolbar;
+import butterknife.BindView;
+
+public class MainActivity extends BaseActivity implements MainContract.View {
+
+    @BindView(R.id.spinner_nav)
+    Spinner spinner;
+
+    @BindView(R.id.tabs)
+    TabLayout tabLayout;
+
+    @BindView(R.id.viewpager)
+    ViewPager viewPager;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @Inject
+    MainPresenter mPresenter;
+
     private Uri data;
-    boolean showImage = true;
-    private Menu menu;
-    AppSettings sharedPrefManager;
-    public static final String IMAGE_SHOW = "showImage";
+    private Menu mMenu;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        //sharedPrefManager = ((EksiSeylerApp) getApplication()).getSharedPrefManager();
-      //  showImage = sharedPrefManager.getBoolean(IMAGE_SHOW);
+    protected void onViewReady(Bundle savedInstanceState) {
+        super.onViewReady(savedInstanceState);
+        getExtras();
+        setupToolbar();
+        setupViewPager();
+        setupSpinner();
+        mPresenter.onViewReady();
+    }
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
-        spinner = (Spinner) findViewById(R.id.spinner_nav);
-        setSupportActionBar(toolbar);
-        Intent intent = getIntent();
-        data = intent.getData();
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                viewPager.setCurrentItem(i);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                spinner.setSelection(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+    //<editor-fold desc="SetUpUi">
+    private void setupSpinner() {
 
         // Spinner Drop down elements
         List<String> categories = new ArrayList<>();
@@ -100,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         categories.add("HABER");
         categories.add("İLİŞKİLER");
         categories.add("KÜLTÜR");
+        categories.add("MAGAZİN");
         categories.add("MODA");
         categories.add("MÜZİK");
         categories.add("OTOMOTİV");
@@ -117,68 +97,26 @@ public class MainActivity extends AppCompatActivity {
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, categories);
         spinner.setAdapter(dataAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                viewPager.setCurrentItem(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main_activity, menu);
-        this.menu = menu;
-        if (showImage)
-            menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_photo_white_24dp));
-        else
-            menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_photo_gray_24dp));
-
-        return true;
+    private void setupToolbar() {
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (sharedPrefManager != null && menu != null) {
-            showImage = sharedPrefManager.getBoolean(IMAGE_SHOW);
-            if (showImage)
-                menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_photo_white_24dp));
-            else
-                menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_photo_gray_24dp));
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.ic_menu_show_image:
-                if (showImage) {
-                    AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("\u2713 " + "Tasarruf Modu Etkin")
-                            .setMessage("Bundan sonraki içerik görüntülemenizde, resimler yüklenmez ve data paketinizden tasarruf edersiniz.")
-                            .setPositiveButton("Tamam", null)
-                            .create();
-                    dialog.show();
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_photo_gray_24dp));
-                } else {
-                    AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("Tasarruf Modu Devredışı")
-                            .setMessage("Bundan sonraki içerik görüntülemenizde, resimleri görebilirsiniz.")
-                            .setPositiveButton("Tamam", null)
-                            .create();
-                    dialog.show();
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_photo_white_24dp));
-
-                }
-                showImage = !showImage;
-                sharedPrefManager.saveBoolean(IMAGE_SHOW, showImage);
-                return true;
-            case R.id.ic_menu_show_bookmark_list:
-                startActivity(new Intent(MainActivity.this, BookMarkListActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.BILIM, "BİLİM")), "BİLİM");
@@ -187,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.HABER, "HABER")), "HABER");
         adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.ILISKILER, "İLİŞKİLER")), "İLİŞKİLER");
         adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.KULTUR, "KÜLTÜR")), "KÜLTÜR");
-        //adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.MAGAZIN,"MAGAZİN")),"MAGAZİN");
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.MAGAZIN, "MAGAZİN")), "MAGAZİN");
         adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.MODA, "MODA")), "MODA");
         //adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.MOTOSIKLET,"MOTOSİKLET")),"MOTOSİKLET");
         adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.MUZIK, "MÜZİK")), "MÜZİK");
@@ -206,11 +144,107 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.YEME_ICME, "YEME İÇME")), "YEME İÇME");
 
         viewPager.setAdapter(adapter);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                spinner.setSelection(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        tabLayout.setupWithViewPager(viewPager);
         if (data != null)
-            openUriFromIntent();
+            mPresenter.handleDeepLink();
+    }
+    //</editor-fold>
+
+    private void getExtras() {
+        Intent intent = getIntent();
+        data = intent.getData();
     }
 
-    private void openUriFromIntent() {
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void resolveDaggerDependency() {
+        DaggerMainComponent.builder()
+                .appComponent(getApplicationComponent())
+                .mainModule(new MainModule(this))
+                .build().inject(this);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main_activity, menu);
+        this.mMenu = menu;
+        updateSavingModeMenuItem(mPresenter.isSavingModeActive());
+
+        return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mMenu != null)
+            updateSavingModeMenuItem(mPresenter.isSavingModeActive());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.ic_menu_show_image:
+                mPresenter.onClickSavingModeMenuItem();
+                return true;
+            case R.id.ic_menu_show_bookmark_list://// TODO: 03/05/2017
+                startActivity(new Intent(MainActivity.this, BookMarkListActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    @Override
+    public void showSavingModeActiveDialog() {
+        DialogBuilder.infoDialog(MainActivity.this,
+                R.string.dialog_title_saving_mode_active,
+                R.string.dialog_message_saving_mode_active)
+                .show();
+    }
+
+    @Override
+    public void showSavingModeNotActiveDialog() {
+        DialogBuilder.infoDialog(MainActivity.this,
+                R.string.dialog_title_saving_mode_passive,
+                R.string.dialog_message_saving_mode_passive)
+                .show();
+    }
+
+    @Override
+    public void updateSavingModeMenuItem(boolean isActive) {
+        if (isActive)
+            mMenu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_photo_gray_24dp));
+        else
+            mMenu.getItem(0).setIcon(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_photo_white_24dp));
+
+    }
+
+    @Override
+    public void openDetailFromDeepLink() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -219,7 +253,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }, 50);
-
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {

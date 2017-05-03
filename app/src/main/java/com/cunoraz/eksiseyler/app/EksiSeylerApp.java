@@ -12,6 +12,7 @@ import com.cunoraz.eksiseyler.di.app.AppModule;
 import com.cunoraz.eksiseyler.di.app.DaggerAppComponent;
 import com.cunoraz.eksiseyler.di.app.NetworkModule;
 
+import io.fabric.sdk.android.BuildConfig;
 import io.fabric.sdk.android.Fabric;
 
 public class EksiSeylerApp extends Application {
@@ -22,6 +23,7 @@ public class EksiSeylerApp extends Application {
     public void onCreate() {
         super.onCreate();
         initializeAppComponent();
+        if (!BuildConfig.DEBUG)
         Fabric.with(this, new Crashlytics());
     }
 

@@ -4,4 +4,11 @@
 
 
     <string name="image_transition_name" translatable="false">image_transition_name</string>
+
+
+    <string name="dialog_action_ok">Tamam</string>
+    <string name="dialog_title_saving_mode_active">✓ Tasarruf Modu Etkin</string>
+    <string name="dialog_message_saving_mode_active">Bundan sonraki içerik görüntülemenizde, resimler yüklenmez ve data paketinizden tasarruf edersiniz.</string>
+    <string name="dialog_title_saving_mode_passive">Tasarruf Modu Devredışı</string>
+    <string name="dialog_message_saving_mode_passive">Bundan sonraki içerik görüntülemenizde, resimleri görebilirsiniz.</string>
 </resources>
