@@ -1,4 +1,4 @@
-package com.cunoraz.eksiseyler.fragment;
+package com.cunoraz.eksiseyler.ui.content;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,20 +6,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.ImageView;
 
 import com.cunoraz.eksiseyler.R;
-import com.cunoraz.eksiseyler.activity.DetailActivity;
-import com.cunoraz.eksiseyler.adapter.PostAdapter;
-import com.cunoraz.eksiseyler.di.main.content.ContentModule;
-import com.cunoraz.eksiseyler.di.main.content.DaggerContentComponent;
-import com.cunoraz.eksiseyler.model.Channel;
-import com.cunoraz.eksiseyler.model.Post;
+import com.cunoraz.eksiseyler.di.content.ContentModule;
+import com.cunoraz.eksiseyler.di.content.DaggerContentComponent;
+import com.cunoraz.eksiseyler.model.rest.entity.Channel;
+import com.cunoraz.eksiseyler.model.rest.entity.Post;
 import com.cunoraz.eksiseyler.ui.base.BaseFragment;
+import com.cunoraz.eksiseyler.ui.detail.DetailActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -29,19 +25,16 @@ import butterknife.BindView;
  * Created by cuneytcarikci on 07/11/2016.
  */
 
-public class ContentFragment extends BaseFragment implements ContentContract.View, PostAdapter.ItemClick {
-
-    private static final String TAG = ContentFragment.class.getSimpleName();
+public class ContentFragment extends BaseFragment implements ContentContract.View, PostAdapter.PostAdapterCallback {
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
-    List<Post> posts;
-    PostAdapter adapter;
-    Channel channel;
-
     @Inject
-    ContentPresenter contentPresenter;
+    ContentPresenter mPresenter;
+
+    private Channel mChannel;
+    private PostAdapter mAdapter;
 
     public static ContentFragment newInstance(Channel channel) {
 
@@ -52,16 +45,13 @@ public class ContentFragment extends BaseFragment implements ContentContract.Vie
         return fragment;
     }
 
-    public ContentFragment() {
-        // Required empty public constructor
-    }
+    //region Override Methods
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            channel = getArguments().getParcelable("arg_channel");
-        }
+        if (getArguments() != null)
+            mChannel = getArguments().getParcelable("arg_channel");
     }
 
     @Override
@@ -72,48 +62,63 @@ public class ContentFragment extends BaseFragment implements ContentContract.Vie
     @Override
     protected void onViewReady() {
         super.onViewReady();
-        contentPresenter.onViewReady();
-
         setupRecyclerView();
-
+        mPresenter.onViewReady();
     }
 
     @Override
     protected void resolveDaggerDependency() {
         DaggerContentComponent.builder().
                 appComponent(getApplicationComponent())
-                .contentModule(new ContentModule(this, channel.getUrlName()))
+                .contentModule(new ContentModule(this, mChannel.getUrlName()))
                 .build().inject(this);
-
     }
+
+    //endregion
+
+    //region Setup Methods
 
     private void setupRecyclerView() {
+        mAdapter = new PostAdapter(ContentFragment.this, new ArrayList<Post>());
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
-        adapter = new PostAdapter(ContentFragment.this, new ArrayList<Post>());
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(mAdapter);
     }
 
-    @Override
-    public void onClick(View v, int position) {
-        Intent intent = new Intent(getActivity(), DetailActivity.class);
-        intent.putExtra("extra_post", posts.get(position));
-        intent.putExtra("extra_category", channel.getName());
+    //endregion
 
-        String transitionName = getString(R.string.image_transition_name);
-        ImageView viewStart = (ImageView) v.findViewById(R.id.row_image);
-        ActivityOptionsCompat options =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                        viewStart,
-                        transitionName
-                );
-        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
-    }
+    //region View Methods
 
     @Override
     public void loadPosts(ArrayList<Post> posts) {
+        mAdapter.updatePosts(posts);
+    }
 
-        adapter.updatePosts(posts);
+    @Override
+    public void openDetail(PostAdapter.PostViewHolder viewHolder, Post post) {
+
+        Intent intent = DetailActivity.newIntent(getContext(), post, mChannel.getName());
+
+        String transitionName = getString(R.string.image_transition_name);
+        ActivityOptionsCompat options =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                        viewHolder.image,
+                        transitionName
+                );
+
+        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
 
     }
+
+    //endregion
+
+    //region Adapter Callback
+
+    @Override
+    public void onClickPost(PostAdapter.PostViewHolder viewHolder, Post post) {
+        mPresenter.onClickPost(viewHolder, post);
+    }
+
+    //endregion
+
 }

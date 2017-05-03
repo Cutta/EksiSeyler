@@ -1,7 +1,7 @@
-package com.cunoraz.eksiseyler.fragment;
+package com.cunoraz.eksiseyler.ui.content;
 
 import com.cunoraz.eksiseyler.domain.content.ContentUsecase;
-import com.cunoraz.eksiseyler.model.Post;
+import com.cunoraz.eksiseyler.model.rest.entity.Post;
 import com.cunoraz.eksiseyler.ui.base.BasePresenter;
 
 import org.jsoup.Jsoup;
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -25,26 +26,26 @@ import retrofit2.Response;
 
 public class ContentPresenter extends BasePresenter<ContentContract.View> implements ContentContract.Presenter {
 
-    ContentUsecase contentUsecase;
-    String channel;
-
+    private String mChannel;
+    private ContentUsecase mContentUsecase;
 
     @Inject
-    public ContentPresenter(ContentUsecase contentUsecase, ContentContract.View view, String channel) {
-        this.contentUsecase = contentUsecase;
-        this.channel = channel;
-        this.view = view;
+    public ContentPresenter(ContentUsecase contentUsecase, @Named("channel") String channel) {
+        this.mContentUsecase = contentUsecase;
+        this.mChannel = channel;
     }
+
+    //region Presenter Methods
 
     @Override
     public void onViewReady() {
-        contentUsecase.getPostList(channel).enqueue(new Callback<ResponseBody>() {
+        mContentUsecase.getPostList(mChannel).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 ArrayList<Post> posts;
-                if (channel.startsWith("kategori"))
+                if (mChannel.startsWith("kategori"))
                     posts = parseCategory(response);
-                else if (channel.startsWith("kanal"))
+                else if (mChannel.startsWith("kanal"))
                     posts = parseChannel(response);
                 else
                     posts = new ArrayList<>();
@@ -59,6 +60,15 @@ public class ContentPresenter extends BasePresenter<ContentContract.View> implem
         });
 
     }
+
+    @Override
+    public void onClickPost(PostAdapter.PostViewHolder viewHolder, Post post) {
+        getView().openDetail(viewHolder, post);
+    }
+
+    //endregion
+
+    //region Parse Methods
 
     private ArrayList<Post> parseChannel(Response<ResponseBody> response) {
         HashSet<Post> set = new HashSet<>();
@@ -122,4 +132,7 @@ public class ContentPresenter extends BasePresenter<ContentContract.View> implem
         }
         return new ArrayList<>();
     }
+
+    //endregion
+
 }

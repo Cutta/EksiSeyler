@@ -1,5 +1,6 @@
-package com.cunoraz.eksiseyler.activity;
+package com.cunoraz.eksiseyler.ui.detail;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -29,8 +30,9 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaderFactory;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.cunoraz.eksiseyler.R;
-import com.cunoraz.eksiseyler.utility.AppSettings;
-import com.cunoraz.eksiseyler.model.Post;
+import com.cunoraz.eksiseyler.ui.main.MainActivity;
+import com.cunoraz.eksiseyler.util.AppSettings;
+import com.cunoraz.eksiseyler.model.rest.entity.Post;
 
 /**
  * Created by cuneytcarikci on 08/11/2016.
@@ -56,6 +58,18 @@ public class DetailActivity extends AppCompatActivity {
     private Menu menu;
 
     private boolean isBookmarked = false;
+
+    public static Intent newIntent(Context context, Post post, String channel) {
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("extra_post", post);
+        bundle.putString("extra_category", channel);
+
+        Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtras(bundle);
+        return intent;
+
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

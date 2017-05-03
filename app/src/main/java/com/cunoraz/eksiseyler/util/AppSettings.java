@@ -1,9 +1,9 @@
-package com.cunoraz.eksiseyler.utility;
+package com.cunoraz.eksiseyler.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.cunoraz.eksiseyler.model.Post;
+import com.cunoraz.eksiseyler.model.rest.entity.Post;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

@@ -1,4 +1,4 @@
-package com.cunoraz.eksiseyler.activity;
+package com.cunoraz.eksiseyler.ui.favourites;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,9 +14,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cunoraz.eksiseyler.R;
-import com.cunoraz.eksiseyler.adapter.PostAdapter;
-import com.cunoraz.eksiseyler.model.Post;
-import com.cunoraz.eksiseyler.utility.AppSettings;
+import com.cunoraz.eksiseyler.ui.content.PostAdapter;
+import com.cunoraz.eksiseyler.model.rest.entity.Post;
+import com.cunoraz.eksiseyler.ui.detail.DetailActivity;
+import com.cunoraz.eksiseyler.util.AppSettings;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ import java.util.List;
  * Kaydedilendleri gösterdigimiz activty
  */
 
-public class BookMarkListActivity extends AppCompatActivity implements PostAdapter.ItemClick {
+public class BookMarkListActivity extends AppCompatActivity implements PostAdapter.PostAdapterCallback {
     AppSettings manager;
     RecyclerView recyclerView;
     TextView emptyListText;
@@ -37,7 +38,6 @@ public class BookMarkListActivity extends AppCompatActivity implements PostAdapt
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmark_list);
-       // manager = ((EksiSeylerApp) getApplication()).getSharedPrefManager();
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         emptyListText = (TextView) findViewById(R.id.empty_list_text);
@@ -72,18 +72,17 @@ public class BookMarkListActivity extends AppCompatActivity implements PostAdapt
     }
 
     @Override
-    public void onClick(View v, int position) {
-        Intent intent = new Intent(BookMarkListActivity.this, DetailActivity.class);
-        intent.putExtra("extra_post", posts.get(position));
-        intent.putExtra("extra_category", "Favori Yazı");
+    public void onClickPost(PostAdapter.PostViewHolder viewHolder, Post post) {
+        Intent intent = DetailActivity.newIntent(this, post, "Favori Yazı");
 
         String transitionName = getString(R.string.image_transition_name);
-        ImageView viewStart = (ImageView) v.findViewById(R.id.row_image);
         ActivityOptionsCompat options =
                 ActivityOptionsCompat.makeSceneTransitionAnimation(BookMarkListActivity.this,
-                        viewStart,   // Starting view
-                        transitionName    // The String
+                        viewHolder.image,
+                        transitionName
                 );
+
         ActivityCompat.startActivity(BookMarkListActivity.this, intent, options.toBundle());
     }
+
 }

@@ -1,8 +1,8 @@
-package com.cunoraz.eksiseyler.di.main.content;
+package com.cunoraz.eksiseyler.di.content;
 
 import com.cunoraz.eksiseyler.di.app.AppComponent;
-import com.cunoraz.eksiseyler.fragment.ContentFragment;
-import com.cunoraz.eksiseyler.fragment.PerFragment;
+import com.cunoraz.eksiseyler.ui.content.ContentFragment;
+import com.cunoraz.eksiseyler.di.PerFragment;
 
 import dagger.Component;
 

@@ -1,6 +1,6 @@
 package com.cunoraz.eksiseyler.domain.content;
 
-import com.cunoraz.eksiseyler.rest.ApiSource;
+import com.cunoraz.eksiseyler.model.rest.ApiSource;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

@@ -1,7 +1,7 @@
 package com.cunoraz.eksiseyler.di.app;
 
-import com.cunoraz.eksiseyler.rest.ApiSource;
-import com.cunoraz.eksiseyler.rest.ApiSourceImpl;
+import com.cunoraz.eksiseyler.model.rest.ApiSource;
+import com.cunoraz.eksiseyler.model.rest.ApiSourceImpl;
 
 import java.util.concurrent.TimeUnit;
 

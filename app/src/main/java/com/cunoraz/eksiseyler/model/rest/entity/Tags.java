@@ -1,4 +1,4 @@
-package com.cunoraz.eksiseyler.utility;
+package com.cunoraz.eksiseyler.model.rest.entity;
 
 /**
  * Created by cuneytcarikci on 07/11/2016.

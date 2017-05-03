@@ -1,4 +1,4 @@
-package com.cunoraz.eksiseyler.model;
+package com.cunoraz.eksiseyler.model.rest.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;

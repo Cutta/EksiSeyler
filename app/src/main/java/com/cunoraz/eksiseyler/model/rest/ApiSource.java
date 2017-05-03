@@ -1,4 +1,4 @@
-package com.cunoraz.eksiseyler.rest;
+package com.cunoraz.eksiseyler.model.rest;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

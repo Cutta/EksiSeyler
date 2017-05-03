@@ -1,4 +1,4 @@
-package com.cunoraz.eksiseyler.activity;
+package com.cunoraz.eksiseyler.ui.main;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -22,10 +22,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.cunoraz.eksiseyler.R;
-import com.cunoraz.eksiseyler.fragment.ContentFragment;
-import com.cunoraz.eksiseyler.utility.AppSettings;
-import com.cunoraz.eksiseyler.utility.Tags;
-import com.cunoraz.eksiseyler.model.Channel;
+import com.cunoraz.eksiseyler.ui.favourites.BookMarkListActivity;
+import com.cunoraz.eksiseyler.ui.detail.DetailActivity;
+import com.cunoraz.eksiseyler.ui.content.ContentFragment;
+import com.cunoraz.eksiseyler.util.AppSettings;
+import com.cunoraz.eksiseyler.model.rest.entity.Tags;
+import com.cunoraz.eksiseyler.model.rest.entity.Channel;
 
 import java.util.ArrayList;
 import java.util.List;

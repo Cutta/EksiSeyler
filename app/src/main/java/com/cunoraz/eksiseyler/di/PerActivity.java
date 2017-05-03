@@ -1,4 +1,4 @@
-package com.cunoraz.eksiseyler.fragment;
+package com.cunoraz.eksiseyler.di;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -6,10 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import javax.inject.Scope;
 
 /**
- * Created by cuneytcarikci on 02/05/2017.
+ * Created by andanicalik on 03/05/17.
  */
 
 @Scope
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PerFragment {
+public @interface PerActivity {
 }

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.cunoraz.eksiseyler.app.EksiSeylerApp;
-import com.cunoraz.eksiseyler.rest.ApiSource;
+import com.cunoraz.eksiseyler.model.rest.ApiSource;
 
 import javax.inject.Singleton;
 
