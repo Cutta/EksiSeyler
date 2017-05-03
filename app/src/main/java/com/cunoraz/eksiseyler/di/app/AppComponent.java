@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.cunoraz.eksiseyler.app.EksiSeylerApp;
+import com.cunoraz.eksiseyler.model.pref.PreferencesHelper;
 import com.cunoraz.eksiseyler.model.rest.ApiSource;
 
 import javax.inject.Singleton;
@@ -18,12 +19,12 @@ import dagger.Component;
 @Component(modules = {AppModule.class, NetworkModule.class})
 public interface AppComponent {
 
-    void inject(EksiSeylerApp app);
-
-    SharedPreferences sharedPreferences();
-
     Context context();
 
     ApiSource apiSource();
+
+    PreferencesHelper preferencesHelper();
+
+    void inject(EksiSeylerApp app);
 
 }

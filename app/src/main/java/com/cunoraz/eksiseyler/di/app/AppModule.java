@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.cunoraz.eksiseyler.model.pref.PreferencesHelper;
+import com.cunoraz.eksiseyler.model.pref.PreferencesHelperImpl;
 import com.google.gson.Gson;
 
 import javax.inject.Singleton;
@@ -46,7 +48,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    SharedPreferences providesSharedPreferences(Application application) {
-        return PreferenceManager.getDefaultSharedPreferences(application);
+    PreferencesHelper providePreferencesHelper(Context context, Gson gson) {
+        return new PreferencesHelperImpl(context, gson);
     }
+
 }
