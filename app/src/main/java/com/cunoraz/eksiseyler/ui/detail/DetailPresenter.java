@@ -28,10 +28,11 @@ public class DetailPresenter extends BasePresenter<DetailContract.View> implemen
     public void onViewReady() {
         if (mPost != null && mPost.getUrl() != null && !mPost.getUrl().isEmpty()) {
 
-            if (mChannel != null && !mChannel.isEmpty()) {
+            if (mChannel != null && !mChannel.isEmpty())
                 getView().updateToolbarTitle(mChannel);
+
+            if (mPost.getImg() != null && !mPost.getImg().equals(""))//urlden tıklayınca image linki yoko yuzden sorumlulugu ayirdim
                 getView().loadHeaderImage(mPost.getImg());
-            }
 
             getView().updateWebViewLoadImage(mDetailUsecase.isSavingModeActive());
             getView().loadWebView(mPost.getUrl());

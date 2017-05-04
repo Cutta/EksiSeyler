@@ -158,6 +158,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
                 mPost.setImg("");
                 mPost.setName("Ekşi Şeyler");
                 mPost.setUrl(extras.getString(EXTRA_URL));
+                mChannel = "Ekşi Şeyler";//URL den gelince yazı başlığı olmadıgı için bunu yazsın dedik
 
             } else if (extras.containsKey(EXTRA_POST) &&
                     extras.containsKey(EXTRA_CHANNEL)) {
