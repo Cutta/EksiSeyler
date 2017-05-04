@@ -1,5 +1,7 @@
 package com.cunoraz.eksiseyler.ui.detail;
 
+import android.support.annotation.StringRes;
+
 import com.cunoraz.eksiseyler.ui.base.BaseView;
 
 /**
@@ -30,7 +32,7 @@ public class DetailContract {
 
         void updateFavouriteMenuItem(boolean isOneOfFavouritePosts);
 
-        void showToastMessage(String message);
+        void showToastMessage(@StringRes int message);
 
         void showSnackbarMessage(String message);
 

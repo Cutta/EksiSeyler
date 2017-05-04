@@ -45,4 +45,10 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
         getView().openDetailFromDeepLink();
     }
 
+    @Override
+    public void onClickFavouritesActivity() {
+        getView().openFavouritesActivity();
+    }
+
+
 }

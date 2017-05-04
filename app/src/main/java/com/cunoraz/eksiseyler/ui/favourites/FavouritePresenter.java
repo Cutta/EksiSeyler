@@ -27,7 +27,6 @@ public class FavouritePresenter extends BasePresenter<FavouritiesContract.View> 
 
         ArrayList<Post> posts = (ArrayList<Post>) mFavouritesUsecase.getPostListFromSharedPreference();
         getView().loadPosts(posts);
-
     }
 
     @Override

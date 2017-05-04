@@ -1,5 +1,6 @@
 package com.cunoraz.eksiseyler.ui.detail;
 
+import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.domain.detail.DetailUsecase;
 import com.cunoraz.eksiseyler.model.rest.entity.Post;
 import com.cunoraz.eksiseyler.ui.base.BasePresenter;
@@ -31,7 +32,8 @@ public class DetailPresenter extends BasePresenter<DetailContract.View> implemen
             if (mChannel != null && !mChannel.isEmpty())
                 getView().updateToolbarTitle(mChannel);
 
-            if (mPost.getImg() != null && !mPost.getImg().equals(""))//urlden tıklayınca image linki yoko yuzden sorumlulugu ayirdim
+            //urlden tıklayınca image linki yok o yuzden sorumlulugu ayirdim
+            if (mPost.getImg() != null && !mPost.getImg().equals(""))
                 getView().loadHeaderImage(mPost.getImg());
 
             getView().updateWebViewLoadImage(mDetailUsecase.isSavingModeActive());
@@ -79,7 +81,7 @@ public class DetailPresenter extends BasePresenter<DetailContract.View> implemen
                 getView().updateFavouriteMenuItem(true);
                 getView().showAddedToFavourites();
             } else
-                getView().showToastMessage("Favorilere eklenemedi, lütfen daha sonra tekrar deneyin!");
+                getView().showToastMessage(R.string.favourite_adding_error_text);
         }
     }
 

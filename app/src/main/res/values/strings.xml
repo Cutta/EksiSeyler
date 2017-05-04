@@ -15,4 +15,7 @@
     <string name="empty_favourites_list_text">Favori listeniz boş!</string>
     <string name="favourite_title">Favori Yazı</string>
     <string name="show_image_text">Resimleri Göster</string>
+    <string name="favourite_adding_error_text">Favorilere eklenemedi, lütfen daha sonra tekrar deneyin!</string>
+    <string name="favourite_adding_success_text">Favorilere eklendi.</string>
+    <string name="favourite_removing_success_text">Favorilerden silindi!</string>
 </resources>

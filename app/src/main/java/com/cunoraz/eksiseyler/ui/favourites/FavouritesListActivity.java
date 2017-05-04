@@ -111,6 +111,9 @@ public class FavouritesListActivity extends BaseActivity implements FavouritiesC
             case R.id.ic_menu_show_image:
                 mPresenter.onClickSavingModeMenuItem();
                 return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

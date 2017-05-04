@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -261,7 +262,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
 
         Glide.with(DetailActivity.this)
                 .load(glideUrl)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(image);
     }
 
@@ -284,12 +285,12 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
 
     @Override
     public void showAddedToFavourites() {
-        Snackbar.make(rootLayout, "Favorilere eklendi.", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(rootLayout, R.string.favourite_adding_success_text, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void showRemovedFromFavourites() {
-        Snackbar.make(rootLayout, "Favorilerden silindi!", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(rootLayout, R.string.favourite_removing_success_text, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -309,7 +310,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     }
 
     @Override
-    public void showToastMessage(String message) {
+    public void showToastMessage(@StringRes int message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 

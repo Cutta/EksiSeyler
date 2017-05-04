@@ -33,13 +33,14 @@ public class ContentFragment extends BaseFragment implements ContentContract.Vie
     @Inject
     ContentPresenter mPresenter;
 
+    private static final String ARGUMENT = "arg_channel";
     private Channel mChannel;
     private PostAdapter mAdapter;
 
     public static ContentFragment newInstance(Channel channel) {
 
         Bundle args = new Bundle();
-        args.putParcelable("arg_channel", channel);
+        args.putParcelable(ARGUMENT, channel);
         ContentFragment fragment = new ContentFragment();
         fragment.setArguments(args);
         return fragment;
@@ -51,7 +52,7 @@ public class ContentFragment extends BaseFragment implements ContentContract.Vie
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null)
-            mChannel = getArguments().getParcelable("arg_channel");
+            mChannel = getArguments().getParcelable(ARGUMENT);
     }
 
     @Override

@@ -54,7 +54,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Inject
     MainPresenter mPresenter;
 
-    private Uri data;
+    private Uri mData;
     private Menu mMenu;
 
     @Override
@@ -64,6 +64,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         setupViewPager();
         setupSpinner();
         getExtras();
+
         mPresenter.onViewReady();
     }
 
@@ -119,29 +120,29 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.BILIM, "BİLİM")), "BİLİM");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.EDEBIYAT, "EDEBİYAT")), "EDEBİYAT");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.EGLENCE, "EĞLENCE")), "EĞLENCE");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.HABER, "HABER")), "HABER");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.ILISKILER, "İLİŞKİLER")), "İLİŞKİLER");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.KULTUR, "KÜLTÜR")), "KÜLTÜR");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.MAGAZIN, "MAGAZİN")), "MAGAZİN");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.MODA, "MODA")), "MODA");
-        //adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.MOTOSIKLET,"MOTOSİKLET")),"MOTOSİKLET");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.MUZIK, "MÜZİK")), "MÜZİK");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.OTOMOTIV, "OTOMOTİV")), "OTOMOTİV");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.OYUN, "OYUN")), "OYUN");
-        //adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.PROGRAMLAMA,"PROGRAMLAMA")),"PROGRAMLAMA");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.SAGLIK, "SAĞLIK")), "SAĞLIK");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.SANAT, "SANAT")), "SANAT");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.SINEMA, "SİNEMA")), "SİNEMA");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.SIYASET, "SİYASET")), "SİYASET");
-        //adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.SPOILER,"SPOILER")),"SPOILER");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.SPOR, "SPOR")), "SPOR");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.TARIH, "TARİH")), "TARİH");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.TEKNOLOJI, "TEKNOLOJİ")), "TEKNOLOJİ");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.YASAM, "YAŞAM")), "YAŞAM");
-        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.YEME_ICME, "YEME İÇME")), "YEME İÇME");
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.BILIM)), Tags.BILIM.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.EDEBIYAT)), Tags.EDEBIYAT.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.EGLENCE)), Tags.EGLENCE.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.HABER)), Tags.HABER.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.ILISKILER)), Tags.ILISKILER.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.KULTUR)), Tags.KULTUR.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.MAGAZIN)), Tags.MAGAZIN.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.MODA)), Tags.MODA.getTitle());
+        //adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.MOTOSIKL)), Tags.MOTOSIKL.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.MUZIK)), Tags.MUZIK.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.OTOMOTIV)), Tags.OTOMOTIV.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.OYUN)), Tags.OYUN.getTitle());
+        //adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.PROGRAMLA)), Tags.PROGRAMLA.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.SAGLIK)), Tags.SAGLIK.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.SANAT)), Tags.SANAT.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.SINEMA)), Tags.SINEMA.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.SIYASET)), Tags.SIYASET.getTitle());
+        //adapter.addFrag(ContextFragment.newInstance(new Channel(Tags.SPOILER,"SPOILER")),","SPOILER".getTitle()
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.SPOR)), Tags.SPOR.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.TARIH)), Tags.TARIH.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.TEKNOLOJI)), Tags.TEKNOLOJI.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.YASAM)), Tags.YASAM.getTitle());
+        adapter.addFrag(ContentFragment.newInstance(new Channel(Tags.YEME_ICME)), Tags.YEME_ICME.getTitle());
 
         viewPager.setAdapter(adapter);
 
@@ -166,8 +167,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     private void getExtras() {//// TODO: 04/05/2017 presenter ı kısıtlamamalı.
         Intent intent = getIntent();
-        data = intent.getData();
-        if (data != null)
+        mData = intent.getData();
+        if (mData != null)
             mPresenter.handleDeepLink();
     }
 
@@ -209,8 +210,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             case R.id.ic_menu_show_image:
                 mPresenter.onClickSavingModeMenuItem();
                 return true;
-            case R.id.ic_menu_show_bookmark_list://// TODO: 03/05/2017
-                startActivity(new Intent(MainActivity.this, FavouritesListActivity.class));
+            case R.id.ic_menu_show_bookmark_list:
+                mPresenter.onClickFavouritesActivity();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -249,10 +250,15 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             @Override
             public void run() {
                 Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-                intent.putExtra(DetailActivity.EXTRA_URL, data.toString());
+                intent.putExtra(DetailActivity.EXTRA_URL, mData.toString());
                 startActivity(intent);
             }
         }, 50);
+    }
+
+    @Override
+    public void openFavouritesActivity() {
+        startActivity(new Intent(MainActivity.this, FavouritesListActivity.class));
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {

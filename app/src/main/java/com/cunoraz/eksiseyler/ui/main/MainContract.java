@@ -18,6 +18,8 @@ public class MainContract {
 
         void openDetailFromDeepLink();
 
+        void openFavouritesActivity();
+
     }
 
     interface Presenter {
@@ -30,6 +32,7 @@ public class MainContract {
 
         void handleDeepLink();
 
+        void onClickFavouritesActivity();
     }
 
 }

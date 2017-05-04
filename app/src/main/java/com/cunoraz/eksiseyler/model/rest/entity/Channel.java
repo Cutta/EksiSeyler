@@ -13,9 +13,9 @@ public class Channel implements Parcelable {
     private String urlName;
     private String name;
 
-    public Channel(String urlName, String name) {
-        this.urlName = urlName;
-        this.name = name;
+    public Channel(Tags.Tag tag) {
+        this.urlName = tag.getEndPoint();
+        this.name = tag.getTitle();
     }
 
     public String getUrlName() {
