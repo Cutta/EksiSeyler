@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.content.ContentFragment">
+    tools:context=".ui.favourites.FavouritesListActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            android:title="Favoriler"
+            android:title="@string/toolbar_title_favourites"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     </android.support.design.widget.AppBarLayout>
@@ -32,9 +32,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:visibility="gone"
-        android:text="Favori listeniz boş!"
+        android:text="@string/empty_favourites_list_text"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:textColor="#505050" />
+        android:textColor="#505050"
+        android:visibility="gone" />
 
 </android.support.design.widget.CoordinatorLayout>

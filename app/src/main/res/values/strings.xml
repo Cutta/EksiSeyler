@@ -11,4 +11,8 @@
     <string name="dialog_message_saving_mode_active">Bundan sonraki içerik görüntülemenizde, resimler yüklenmez ve data paketinizden tasarruf edersiniz.</string>
     <string name="dialog_title_saving_mode_passive">Tasarruf Modu Devredışı</string>
     <string name="dialog_message_saving_mode_passive">Bundan sonraki içerik görüntülemenizde, resimleri görebilirsiniz.</string>
+    <string name="toolbar_title_favourites">Favoriler</string>
+    <string name="empty_favourites_list_text">Favori listeniz boş!</string>
+    <string name="favourite_title">Favori Yazı</string>
+    <string name="show_image_text">Resimleri Göster</string>
 </resources>

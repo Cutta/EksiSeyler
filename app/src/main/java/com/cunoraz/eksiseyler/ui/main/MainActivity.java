@@ -27,7 +27,7 @@ import com.cunoraz.eksiseyler.model.rest.entity.Tags;
 import com.cunoraz.eksiseyler.ui.base.BaseActivity;
 import com.cunoraz.eksiseyler.ui.content.ContentFragment;
 import com.cunoraz.eksiseyler.ui.detail.DetailActivity;
-import com.cunoraz.eksiseyler.ui.favourites.BookMarkListActivity;
+import com.cunoraz.eksiseyler.ui.favourites.FavouritesListActivity;
 import com.cunoraz.eksiseyler.util.DialogBuilder;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @BindView(R.id.tabs)
     TabLayout tabLayout;
 
-    @BindView(R.id.viewpager)
+    @BindView(R.id.view_pager)
     ViewPager viewPager;
 
     @BindView(R.id.toolbar)
@@ -60,10 +60,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     protected void onViewReady(Bundle savedInstanceState) {
         super.onViewReady(savedInstanceState);
-        getExtras();
         setupToolbar();
         setupViewPager();
         setupSpinner();
+        getExtras();
         mPresenter.onViewReady();
     }
 
@@ -161,14 +161,14 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             }
         });
         tabLayout.setupWithViewPager(viewPager);
-        if (data != null)
-            mPresenter.handleDeepLink();
     }
     //</editor-fold>
 
-    private void getExtras() {
+    private void getExtras() {//// TODO: 04/05/2017 presenter ı kısıtlamamalı.
         Intent intent = getIntent();
         data = intent.getData();
+        if (data != null)
+            mPresenter.handleDeepLink();
     }
 
     @Override
@@ -210,7 +210,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 mPresenter.onClickSavingModeMenuItem();
                 return true;
             case R.id.ic_menu_show_bookmark_list://// TODO: 03/05/2017
-                startActivity(new Intent(MainActivity.this, BookMarkListActivity.class));
+                startActivity(new Intent(MainActivity.this, FavouritesListActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -249,7 +249,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             @Override
             public void run() {
                 Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-                intent.putExtra("extra_url", data.toString());
+                intent.putExtra(DetailActivity.EXTRA_URL, data.toString());
                 startActivity(intent);
             }
         }, 50);

@@ -12,12 +12,7 @@ import com.cunoraz.eksiseyler.ui.main.MainActivity;
  */
 
 public class DialogBuilder {
-    /*AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
-            .setTitle("\u2713 " + "Tasarruf Modu Etkin")
-            .setMessage("Bundan sonraki içerik görüntülemenizde, resimler yüklenmez ve data paketinizden tasarruf edersiniz.")
-            .setPositiveButton("Tamam", null)
-            .create();
-        dialog.show();*/
+
     public static AlertDialog.Builder infoDialog(Context context, @StringRes int title, @StringRes int message) {
         return new AlertDialog.Builder(context)
                 .setTitle(title)

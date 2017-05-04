@@ -10,4 +10,5 @@ public interface MainUsecase {
 
     void storeSavingModeStatus(boolean willDisplayImages);
 
+
 }

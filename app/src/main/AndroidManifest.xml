@@ -32,7 +32,7 @@
 
         <activity android:name=".ui.detail.DetailActivity" />
 
-        <activity android:name=".ui.favourites.BookMarkListActivity">
+        <activity android:name=".ui.favourites.FavouritesListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />

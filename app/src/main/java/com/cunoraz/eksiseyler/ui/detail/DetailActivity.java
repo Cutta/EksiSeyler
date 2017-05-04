@@ -45,7 +45,7 @@ import butterknife.BindView;
 
 public class DetailActivity extends BaseActivity implements DetailContract.View {
 
-    private static final String EXTRA_URL = "extra_url";
+    public static final String EXTRA_URL = "extra_url";
     private static final String EXTRA_POST = "extra_post";
     private static final String EXTRA_CHANNEL = "extra_channel";
 
@@ -267,12 +267,10 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
 
     @Override
     public void showSavingModeActiveDialog() {
-
         DialogBuilder.infoDialog(DetailActivity.this,
                 R.string.dialog_title_saving_mode_active,
                 R.string.dialog_message_saving_mode_active)
                 .show();
-
     }
 
     @Override
@@ -325,6 +323,5 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         finish();
     }
 
-    //endregion
 
 }
