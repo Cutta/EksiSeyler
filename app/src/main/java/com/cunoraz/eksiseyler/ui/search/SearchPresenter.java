@@ -45,7 +45,11 @@ public class SearchPresenter extends BasePresenter<SearchContract.View> implemen
     }
 
     @Override
-    public void onQueryTextChange(String query) {
+    public void onSearchTextChange(String query) {
+        if (query.equals("")) {
+            getView().clearList();
+            return;
+        }
         mSearchUseCase.getSearchResultList(query).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

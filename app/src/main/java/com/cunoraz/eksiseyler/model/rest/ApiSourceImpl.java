@@ -24,4 +24,9 @@ public class ApiSourceImpl implements ApiSource {
     public Call<ResponseBody> getSearchResult(String query) {
         return retrofitInterface.getSearchResult(query);
     }
+
+    @Override
+    public Call<ResponseBody> getContentPureHtml(String encodedPostName) {
+        return retrofitInterface.getPostPureHtml(encodedPostName);
+    }
 }

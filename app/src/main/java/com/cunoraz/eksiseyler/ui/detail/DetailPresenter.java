@@ -1,12 +1,23 @@
 package com.cunoraz.eksiseyler.ui.detail;
 
+import android.util.Log;
+
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.domain.detail.DetailUsecase;
 import com.cunoraz.eksiseyler.model.rest.entity.Post;
 import com.cunoraz.eksiseyler.ui.base.BasePresenter;
+import com.cunoraz.eksiseyler.util.Utils;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by andanicalik on 03/05/17.
@@ -39,10 +50,32 @@ public class DetailPresenter extends BasePresenter<DetailContract.View> implemen
                 getView().loadHeaderImage(mPost.getImg());
 
             getView().updateWebViewLoadImage(mDetailUsecase.isSavingModeActive());
-            if (getView().isConnect())
-                getView().loadWebView(mPost.getUrl());
-            else
-                getView().loadFromInternalStorage(mPageSource);
+
+            if (getView().isConnect()) {
+                mDetailUsecase.getContentPureHtml(Utils.getEncodedPostName(mPost.getUrl()))
+                        .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                        try {
+                         /*   Element doc = Jsoup.parse((response.body().string()));
+                            Element link = doc.getElementsByClass("content-detail-inner").first();
+                            String contentMain = link.outerHtml();*/
+                            getView().loadWebViewWithTemplate(response.body().string());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.d("onFailure", "onFailure: "+t.getMessage());
+                    }
+                });
+                //getView().loadWebView(mPost.getUrl());
+            } else
+                getView().loadWebViewWithTemplate(mPageSource);
 
         } else
             getView().finishActivity();

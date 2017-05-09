@@ -43,7 +43,7 @@ public class DetailContract {
 
         void saveToInternalStorage();
 
-        void loadFromInternalStorage(String html);
+        void loadWebViewWithTemplate(String html);
     }
 
     interface Presenter {

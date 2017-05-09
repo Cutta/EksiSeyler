@@ -12,4 +12,6 @@ public interface ApiSource {
     Call<ResponseBody> getPostList(String channel);
 
     Call<ResponseBody> getSearchResult(String query);
+
+    Call<ResponseBody> getContentPureHtml(String encodedPostName);
 }

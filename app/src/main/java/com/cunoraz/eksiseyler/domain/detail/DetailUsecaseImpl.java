@@ -1,7 +1,13 @@
 package com.cunoraz.eksiseyler.domain.detail;
 
 import com.cunoraz.eksiseyler.model.pref.PreferencesHelper;
+import com.cunoraz.eksiseyler.model.rest.ApiSource;
 import com.cunoraz.eksiseyler.model.rest.entity.Post;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by andanicalik on 03/05/17.
@@ -9,9 +15,12 @@ import com.cunoraz.eksiseyler.model.rest.entity.Post;
 
 public class DetailUsecaseImpl implements DetailUsecase {
 
+    private ApiSource mApiSource;
     private PreferencesHelper mPreferencesHelper;
 
-    public DetailUsecaseImpl(PreferencesHelper preferencesHelper) {
+
+    public DetailUsecaseImpl(ApiSource apiSource, PreferencesHelper preferencesHelper) {
+        this.mApiSource = apiSource;
         this.mPreferencesHelper = preferencesHelper;
     }
 
@@ -38,6 +47,11 @@ public class DetailUsecaseImpl implements DetailUsecase {
     @Override
     public void removeFromFavouritePosts(Post post) {
         mPreferencesHelper.removeFromFavouritePosts(post);
+    }
+
+    @Override
+    public Call<ResponseBody> getContentPureHtml(String encodedPostName) {
+        return mApiSource.getContentPureHtml(encodedPostName);
     }
 
 }

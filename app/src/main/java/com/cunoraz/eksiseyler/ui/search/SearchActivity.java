@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -57,6 +58,11 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         setupRecyclerView();
 
         mPresenter.onViewReady();
+    }
+
+    @Override
+    public void clearList() {
+        mAdapter.updatePosts(new ArrayList<Post>());
     }
 
     @Override
@@ -115,7 +121,19 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.ic_menu_search).getActionView();
         menu.findItem(R.id.ic_menu_search).expandActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.ic_menu_search), new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return false;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                finish();
+                return true;
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {//todo rx kullaninca debounca yapilacak
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -123,10 +141,11 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                mPresenter.onQueryTextChange(newText);
+                mPresenter.onSearchTextChange(newText);
                 return true;
             }
         });
+
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(true); // Do not iconify the widget; expand it by default

@@ -19,4 +19,8 @@ public interface RetrofitInterface {
     @FormUrlEncoded
     Call<ResponseBody> getSearchResult(@Field("Query") String Query);
 
+
+    @GET("{encoded-post-name}")
+    Call<ResponseBody> getPostPureHtml(@Path("encoded-post-name") String encodedPostName);
+
 }

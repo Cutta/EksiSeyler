@@ -6,6 +6,7 @@ import com.cunoraz.eksiseyler.di.PerActivity;
 import com.cunoraz.eksiseyler.domain.detail.DetailUsecase;
 import com.cunoraz.eksiseyler.domain.detail.DetailUsecaseImpl;
 import com.cunoraz.eksiseyler.model.pref.PreferencesHelper;
+import com.cunoraz.eksiseyler.model.rest.ApiSource;
 import com.cunoraz.eksiseyler.model.rest.entity.Post;
 import com.cunoraz.eksiseyler.ui.detail.DetailContract;
 
@@ -34,8 +35,8 @@ public class DetailModule {
 
     @PerActivity
     @Provides
-    DetailUsecase provideDetailUsecase(PreferencesHelper preferencesHelper) {
-        return new DetailUsecaseImpl(preferencesHelper);
+    DetailUsecase provideDetailUsecase(ApiSource apiSource,PreferencesHelper preferencesHelper) {
+        return new DetailUsecaseImpl(apiSource,preferencesHelper);
     }
 
     @PerActivity

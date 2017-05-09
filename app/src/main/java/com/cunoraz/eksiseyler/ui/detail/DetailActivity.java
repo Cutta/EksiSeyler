@@ -41,8 +41,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -85,7 +92,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     private Post mPost;
     private String mChannel;
     private Menu mMenu;
-    private String mPageSoruce;
+    private String mPageSource;
 
     public static Intent newIntent(Context context, Post post, String channel) {
         Bundle bundle = new Bundle();
@@ -116,7 +123,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         getExtras();
         DaggerDetailComponent.builder()
                 .appComponent(getApplicationComponent())
-                .detailModule(new DetailModule(this, mPost, mChannel, mPageSoruce))
+                .detailModule(new DetailModule(this, mPost, mChannel, mPageSource))
                 .build().inject(this);
     }
 
@@ -174,14 +181,14 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
                 mPost.setName("Ekşi Şeyler");
                 mPost.setUrl(extras.getString(EXTRA_URL));
                 mChannel = "Ekşi Şeyler";//URL den gelince yazı başlığı olmadıgı için bunu yazsın dedik
-                mPageSoruce = "";
+                mPageSource = "";
 
             } else if (extras.containsKey(EXTRA_POST) &&
                     extras.containsKey(EXTRA_CHANNEL)) {
 
                 mPost = extras.getParcelable(EXTRA_POST);
                 mChannel = extras.getString(EXTRA_CHANNEL);
-                mPageSoruce = getContentFromInternalStorage();
+                mPageSource = getContentFromInternalStorage();
 
             }
 
@@ -218,7 +225,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
             @JavascriptInterface
             @SuppressWarnings("unused")
             public void processHTML(String html) {
-                mPageSoruce = html;
+                mPageSource = html;
             }
         }
         webView.setFocusable(true);
@@ -360,13 +367,19 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     @Override
     public void saveToInternalStorage() {
         try {
-            Element doc = Jsoup.parse((mPageSoruce));
+            Element doc = Jsoup.parse((mPageSource));
             Element link = doc.getElementsByClass("content-detail-inner").first();
             String contentMain = link.outerHtml();
-           // String contentMain  = doc.getElementsByClass("content-main").text();
-            FileOutputStream fos = openFileOutput(mPost.getUrl().substring(29), Context.MODE_PRIVATE);
-            fos.write(contentMain.getBytes());
-            fos.close();
+
+            String fileName = Utils.getEncodedPostName(mPost.getUrl()) + ".html";
+            File cacheFolder = getDir("cache", Context.MODE_PRIVATE);
+            cacheFolder.mkdirs();
+            File cacheFile = new File(cacheFolder, fileName);
+
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(cacheFile));
+            outputStreamWriter.write(contentMain);
+            outputStreamWriter.close();
+
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -374,25 +387,55 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     }
 
     @Override
-    public void loadFromInternalStorage(String html) {
-        webView.loadData(html, "text/html", "UTF-8");
+    public void loadWebViewWithTemplate(String contentHtml) {
+        String htmlString;
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("detail_template.html"), "UTF-8"));
+            StringBuilder sb = new StringBuilder();
+            while ((htmlString = reader.readLine()) != null) {
+                sb.append(htmlString).append("\n");
+            }
+            reader.close();
+            htmlString = sb.toString();
+            htmlString = htmlString.replace("--CONTENT--", contentHtml);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            htmlString = "";
+        }
+
+      //  webView.loadDataWithBaseURL("file:///android_asset/", htmlString, "text/html", "utf-8", null);
+        webView.loadData(contentHtml, "text/html", "UTF-8");
     }
 
     public String getContentFromInternalStorage() {
 
-        String html = "";
+        String html;
+
         try {
-            FileInputStream fis = openFileInput(mPost.getUrl().substring(29));
-            Scanner scanner = new Scanner(fis);
-           scanner.useLocale(new Locale("tr"));
-            scanner.useDelimiter("\\Z");
-            html = scanner.next();
-            scanner.close();
+
+            File cacheFolder = getDir("cache", Context.MODE_PRIVATE);
+            File cacheFile = new File(cacheFolder,Utils.getEncodedPostName(mPost.getUrl()) + ".html");
+
+            FileInputStream fileInputStream = new FileInputStream(cacheFile);
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String receiveString;
+            StringBuilder stringBuilder = new StringBuilder();
+
+            while ((receiveString = bufferedReader.readLine()) != null) {
+                stringBuilder.append(receiveString);
+            }
+
+            fileInputStream.close();
+            html = stringBuilder.toString();
+
         } catch (Exception e) {
-            e.printStackTrace();
+            html = null;
         }
 
         return html;
+
     }
 
 }

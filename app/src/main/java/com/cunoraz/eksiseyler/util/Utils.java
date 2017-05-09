@@ -27,4 +27,8 @@ public class Utils {
             return true;
         }
     }
+
+    public static String getEncodedPostName(String url){
+        return url.substring(29);
+    }
 }

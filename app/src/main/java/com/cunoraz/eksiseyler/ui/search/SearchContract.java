@@ -14,6 +14,8 @@ public class SearchContract {
 
     public interface View extends BaseView {
 
+        void clearList();
+
         void loadPosts(ArrayList<Post> posts);
 
         void openDetail(PostAdapter.PostViewHolder viewHolder, Post post);
@@ -26,7 +28,7 @@ public class SearchContract {
 
         void onClickPost(PostAdapter.PostViewHolder viewHolder, Post post);
 
-        void onQueryTextChange(String query);
+        void onSearchTextChange(String query);
 
     }
 
