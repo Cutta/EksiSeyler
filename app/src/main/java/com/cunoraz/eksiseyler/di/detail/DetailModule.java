@@ -1,5 +1,7 @@
 package com.cunoraz.eksiseyler.di.detail;
 
+import android.support.annotation.Nullable;
+
 import com.cunoraz.eksiseyler.di.PerActivity;
 import com.cunoraz.eksiseyler.domain.detail.DetailUsecase;
 import com.cunoraz.eksiseyler.domain.detail.DetailUsecaseImpl;
@@ -20,12 +22,14 @@ public class DetailModule {
 
     private Post mPost;
     private String mChannel;
+    private String mPageSource;
     private DetailContract.View mView;
 
-    public DetailModule(DetailContract.View view, Post post, String channel) {
+    public DetailModule(DetailContract.View view, Post post, String channel,  String pageSource) {
         this.mView = view;
         this.mPost = post;
         this.mChannel = channel;
+        this.mPageSource = pageSource;
     }
 
     @PerActivity
@@ -45,6 +49,15 @@ public class DetailModule {
     @Named("channel")
     String provideChannel() {
         return mChannel;
+    }
+
+    @PerActivity
+    @Provides
+    @Named("html")
+    String providePageSource() {
+        if (mPageSource == null)
+            mPageSource = "";
+        return mPageSource;
     }
 
     @PerActivity

@@ -17,12 +17,14 @@ public class DetailPresenter extends BasePresenter<DetailContract.View> implemen
     private DetailUsecase mDetailUsecase;
     private String mChannel;
     private Post mPost;
+    private String mPageSource;
 
     @Inject
-    public DetailPresenter(DetailUsecase detailUsecase, @Named("channel") String channel, Post post) {
+    public DetailPresenter(DetailUsecase detailUsecase, @Named("channel") String channel, Post post, @Named("html") String pageSoruce) {
         this.mDetailUsecase = detailUsecase;
         this.mChannel = channel;
         this.mPost = post;
+        this.mPageSource = pageSoruce;
     }
 
     @Override
@@ -37,7 +39,10 @@ public class DetailPresenter extends BasePresenter<DetailContract.View> implemen
                 getView().loadHeaderImage(mPost.getImg());
 
             getView().updateWebViewLoadImage(mDetailUsecase.isSavingModeActive());
-            getView().loadWebView(mPost.getUrl());
+            if (getView().isConnect())
+                getView().loadWebView(mPost.getUrl());
+            else
+                getView().loadFromInternalStorage(mPageSource);
 
         } else
             getView().finishActivity();
@@ -80,6 +85,7 @@ public class DetailPresenter extends BasePresenter<DetailContract.View> implemen
                 mDetailUsecase.addToFavouritePosts(mPost);
                 getView().updateFavouriteMenuItem(true);
                 getView().showAddedToFavourites();
+                getView().saveToInternalStorage();
             } else
                 getView().showToastMessage(R.string.favourite_adding_error_text);
         }

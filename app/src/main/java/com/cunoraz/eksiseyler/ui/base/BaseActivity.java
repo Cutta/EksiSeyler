@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.cunoraz.eksiseyler.app.EksiSeylerApp;
 import com.cunoraz.eksiseyler.di.app.AppComponent;
+import com.cunoraz.eksiseyler.util.Utils;
 
 import butterknife.ButterKnife;
 
@@ -36,6 +37,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void resolveDaggerDependency() {
 
+    }
+    public boolean isConnected(){
+        return Utils.isConnected(BaseActivity.this);
     }
 
     @LayoutRes

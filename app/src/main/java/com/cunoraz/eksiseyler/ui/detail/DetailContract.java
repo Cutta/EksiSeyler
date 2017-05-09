@@ -2,6 +2,7 @@ package com.cunoraz.eksiseyler.ui.detail;
 
 import android.support.annotation.StringRes;
 
+import com.cunoraz.eksiseyler.model.rest.entity.Post;
 import com.cunoraz.eksiseyler.ui.base.BaseView;
 
 /**
@@ -38,6 +39,11 @@ public class DetailContract {
 
         void finishActivity();
 
+        boolean isConnect();
+
+        void saveToInternalStorage();
+
+        void loadFromInternalStorage(String html);
     }
 
     interface Presenter {

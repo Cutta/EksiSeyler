@@ -19,4 +19,9 @@ public class ApiSourceImpl implements ApiSource {
     public Call<ResponseBody> getPostList(String channel) {
         return retrofitInterface.getPostList(channel);
     }
+
+    @Override
+    public Call<ResponseBody> getSearchResult(String query) {
+        return retrofitInterface.getSearchResult(query);
+    }
 }

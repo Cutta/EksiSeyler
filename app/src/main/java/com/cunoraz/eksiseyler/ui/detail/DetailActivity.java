@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -34,6 +35,16 @@ import com.cunoraz.eksiseyler.di.detail.DetailModule;
 import com.cunoraz.eksiseyler.model.rest.entity.Post;
 import com.cunoraz.eksiseyler.ui.base.BaseActivity;
 import com.cunoraz.eksiseyler.util.DialogBuilder;
+import com.cunoraz.eksiseyler.util.Utils;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Locale;
+import java.util.Scanner;
 
 import javax.inject.Inject;
 
@@ -74,6 +85,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     private Post mPost;
     private String mChannel;
     private Menu mMenu;
+    private String mPageSoruce;
 
     public static Intent newIntent(Context context, Post post, String channel) {
         Bundle bundle = new Bundle();
@@ -104,7 +116,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         getExtras();
         DaggerDetailComponent.builder()
                 .appComponent(getApplicationComponent())
-                .detailModule(new DetailModule(this, mPost, mChannel))
+                .detailModule(new DetailModule(this, mPost, mChannel, mPageSoruce))
                 .build().inject(this);
     }
 
@@ -149,6 +161,8 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     }
 
     private void getExtras() {
+
+
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
@@ -160,12 +174,14 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
                 mPost.setName("Ekşi Şeyler");
                 mPost.setUrl(extras.getString(EXTRA_URL));
                 mChannel = "Ekşi Şeyler";//URL den gelince yazı başlığı olmadıgı için bunu yazsın dedik
+                mPageSoruce = "";
 
             } else if (extras.containsKey(EXTRA_POST) &&
                     extras.containsKey(EXTRA_CHANNEL)) {
 
                 mPost = extras.getParcelable(EXTRA_POST);
                 mChannel = extras.getString(EXTRA_CHANNEL);
+                mPageSoruce = getContentFromInternalStorage();
 
             }
 
@@ -197,6 +213,14 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     }
 
     private void setupWebView() {
+
+        class MyJavaScriptInterface {
+            @JavascriptInterface
+            @SuppressWarnings("unused")
+            public void processHTML(String html) {
+                mPageSoruce = html;
+            }
+        }
         webView.setFocusable(true);
         webView.setFocusableInTouchMode(true);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -207,6 +231,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         webView.getSettings().setAppCacheEnabled(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         webView.setWebChromeClient(new WebChromeClient());
+        webView.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
@@ -227,9 +252,12 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
                 view.loadUrl("javascript:document.getElementById(\"header-nav\").innerHTML = \"\";void(0);");
                 view.loadUrl("javascript:document.getElementById(\"mobil-sticky-share-topbar\").innerHTML = \"\";void(0);");
 
+                view.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
+
             }
         });
     }
+
 
     //region View Methods
 
@@ -324,5 +352,47 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         finish();
     }
 
+    @Override
+    public boolean isConnect() {
+        return Utils.isConnected(DetailActivity.this);
+    }
+
+    @Override
+    public void saveToInternalStorage() {
+        try {
+            Element doc = Jsoup.parse((mPageSoruce));
+            Element link = doc.getElementsByClass("content-detail-inner").first();
+            String contentMain = link.outerHtml();
+           // String contentMain  = doc.getElementsByClass("content-main").text();
+            FileOutputStream fos = openFileOutput(mPost.getUrl().substring(29), Context.MODE_PRIVATE);
+            fos.write(contentMain.getBytes());
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void loadFromInternalStorage(String html) {
+        webView.loadData(html, "text/html", "UTF-8");
+    }
+
+    public String getContentFromInternalStorage() {
+
+        String html = "";
+        try {
+            FileInputStream fis = openFileInput(mPost.getUrl().substring(29));
+            Scanner scanner = new Scanner(fis);
+           scanner.useLocale(new Locale("tr"));
+            scanner.useDelimiter("\\Z");
+            html = scanner.next();
+            scanner.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return html;
+    }
 
 }

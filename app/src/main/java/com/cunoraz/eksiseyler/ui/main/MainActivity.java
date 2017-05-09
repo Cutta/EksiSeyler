@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.di.main.DaggerMainComponent;
@@ -28,6 +30,7 @@ import com.cunoraz.eksiseyler.ui.base.BaseActivity;
 import com.cunoraz.eksiseyler.ui.content.ContentFragment;
 import com.cunoraz.eksiseyler.ui.detail.DetailActivity;
 import com.cunoraz.eksiseyler.ui.favourites.FavouritesListActivity;
+import com.cunoraz.eksiseyler.ui.search.SearchActivity;
 import com.cunoraz.eksiseyler.util.DialogBuilder;
 
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity implements MainContract.View {
 
@@ -50,6 +54,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
 
     @Inject
     MainPresenter mPresenter;
@@ -261,6 +266,11 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         startActivity(new Intent(MainActivity.this, FavouritesListActivity.class));
     }
 
+    @Override
+    public void openSearchActivity() {
+        startActivity(new Intent(MainActivity.this, SearchActivity.class));
+    }
+
     private class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
@@ -288,6 +298,11 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+    }
+
+    @OnClick(R.id.fab)
+    public void onFabClick(){
+        mPresenter.onClickFab();
     }
 
 }

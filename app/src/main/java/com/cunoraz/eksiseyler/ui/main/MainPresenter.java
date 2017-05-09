@@ -50,5 +50,9 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
         getView().openFavouritesActivity();
     }
 
+    @Override
+    public void onClickFab() {
+        getView().openSearchActivity();
+    }
 
 }
