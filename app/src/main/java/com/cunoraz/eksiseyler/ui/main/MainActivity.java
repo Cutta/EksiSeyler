@@ -4,7 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,7 +20,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.di.main.DaggerMainComponent;
@@ -32,6 +32,7 @@ import com.cunoraz.eksiseyler.ui.detail.DetailActivity;
 import com.cunoraz.eksiseyler.ui.favourites.FavouritesListActivity;
 import com.cunoraz.eksiseyler.ui.search.SearchActivity;
 import com.cunoraz.eksiseyler.util.DialogBuilder;
+import com.cunoraz.eksiseyler.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,9 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity implements MainContract.View {
+
+    @BindView(R.id.root_layout)
+    CoordinatorLayout rootLayout;
 
     @BindView(R.id.spinner_nav)
     Spinner spinner;
@@ -223,7 +227,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         }
     }
 
-
     @Override
     public void showSavingModeActiveDialog() {
         DialogBuilder.infoDialog(MainActivity.this,
@@ -271,7 +274,17 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         startActivity(new Intent(MainActivity.this, SearchActivity.class));
     }
 
-    private class ViewPagerAdapter extends FragmentPagerAdapter {
+    @Override
+    public boolean isConnect() {
+        return Utils.isConnected(MainActivity.this);
+    }
+
+    @Override
+    public void showSnackBar(int message) {
+        Snackbar.make(rootLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    private static class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -301,7 +314,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     }
 
     @OnClick(R.id.fab)
-    public void onFabClick(){
+    public void onFabClick() {
         mPresenter.onClickFab();
     }
 

@@ -39,19 +39,14 @@ import com.cunoraz.eksiseyler.util.Utils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Locale;
-import java.util.Scanner;
+import java.nio.charset.Charset;
 
 import javax.inject.Inject;
 
@@ -365,7 +360,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     }
 
     @Override
-    public void saveToInternalStorage() {
+    public boolean saveToInternalStorage() {
         try {
             Element doc = Jsoup.parse((mPageSource));
             Element link = doc.getElementsByClass("content-detail-inner").first();
@@ -376,18 +371,21 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
             cacheFolder.mkdirs();
             File cacheFile = new File(cacheFolder, fileName);
 
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(cacheFile));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(cacheFile), Charset.forName("UTF-8"));
             outputStreamWriter.write(contentMain);
             outputStreamWriter.close();
+            return true;
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.favourite_not_loaded_content_warning_text, Toast.LENGTH_LONG).show();
         }
+        return false;
     }
 
     @Override
     public void loadWebViewWithTemplate(String contentHtml) {
+        Toast.makeText(this, R.string.not_connected_content_warning, Toast.LENGTH_LONG).show();
         String htmlString;
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("detail_template.html"), "UTF-8"));
@@ -404,21 +402,21 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
             htmlString = "";
         }
 
-      //  webView.loadDataWithBaseURL("file:///android_asset/", htmlString, "text/html", "utf-8", null);
-        webView.loadData(contentHtml, "text/html", "UTF-8");
+        webView.loadDataWithBaseURL("file:///android_asset/", htmlString, "text/html", "utf-8", null);
+        //  webView.loadData(contentHtml, "text/html", "UTF-8");
     }
 
     public String getContentFromInternalStorage() {
 
-        String html;
+        String html = null;
 
         try {
 
             File cacheFolder = getDir("cache", Context.MODE_PRIVATE);
-            File cacheFile = new File(cacheFolder,Utils.getEncodedPostName(mPost.getUrl()) + ".html");
+            File cacheFile = new File(cacheFolder, Utils.getEncodedPostName(mPost.getUrl()) + ".html");
 
             FileInputStream fileInputStream = new FileInputStream(cacheFile);
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, Charset.forName("UTF-8"));
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String receiveString;
             StringBuilder stringBuilder = new StringBuilder();
@@ -426,12 +424,11 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
             while ((receiveString = bufferedReader.readLine()) != null) {
                 stringBuilder.append(receiveString);
             }
-
             fileInputStream.close();
             html = stringBuilder.toString();
 
         } catch (Exception e) {
-            html = null;
+            e.printStackTrace();
         }
 
         return html;

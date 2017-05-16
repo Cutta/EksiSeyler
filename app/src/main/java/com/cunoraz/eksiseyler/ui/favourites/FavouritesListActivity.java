@@ -163,15 +163,8 @@ public class FavouritesListActivity extends BaseActivity implements FavouritiesC
     public void openDetail(PostAdapter.PostViewHolder viewHolder, Post post) {
 
         Intent intent = DetailActivity.newIntent(this, post, getString(R.string.favourite_title));
+        startActivity(intent);
 
-        String transitionName = getString(R.string.image_transition_name);
-        ActivityOptionsCompat options =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(FavouritesListActivity.this,
-                        viewHolder.image,
-                        transitionName
-                );
-
-        ActivityCompat.startActivity(FavouritesListActivity.this, intent, options.toBundle());
     }
 
     private void setToolbar() {

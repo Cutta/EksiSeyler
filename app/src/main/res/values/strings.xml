@@ -2,10 +2,6 @@
     <string name="app_name">Ekşi Şeyler</string>
     <string name="label">Label</string>
 
-
-    <string name="image_transition_name" translatable="false">image_transition_name</string>
-
-
     <string name="dialog_action_ok">Tamam</string>
     <string name="dialog_title_saving_mode_active">✓ Tasarruf Modu Etkin</string>
     <string name="dialog_message_saving_mode_active">Bundan sonraki içerik görüntülemenizde, resimler yüklenmez ve data paketinizden tasarruf edersiniz.</string>
@@ -19,5 +15,8 @@
     <string name="favourite_adding_error_text">Favorilere eklenemedi, lütfen daha sonra tekrar deneyin!</string>
     <string name="favourite_adding_success_text">Favorilere eklendi.</string>
     <string name="favourite_removing_success_text">Favorilerden silindi!</string>
+    <string name="favourite_not_loaded_content_warning_text">Lütfen tüm sayfanın yüklenmesini bekleyin!</string>
     <string name="search_hint">Ara</string>
+    <string name="redirect_favourite_if_not_connect">İnternet bağlantısı mevcut değil! Dilerseniz favorilerinizi çevrimdışı okuyabilirsiniz.</string>
+    <string name="not_connected_content_warning">İnternet bağlantısı mevcut değil! İçerik düzgün görüntülenmeyebilir!</string>
 </resources>

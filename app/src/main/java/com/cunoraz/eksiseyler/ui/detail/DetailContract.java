@@ -41,7 +41,7 @@ public class DetailContract {
 
         boolean isConnect();
 
-        void saveToInternalStorage();
+        boolean saveToInternalStorage();
 
         void loadWebViewWithTemplate(String html);
     }

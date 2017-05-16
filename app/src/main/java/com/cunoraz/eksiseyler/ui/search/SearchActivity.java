@@ -74,15 +74,8 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     public void openDetail(PostAdapter.PostViewHolder viewHolder, Post post) {
 
         Intent intent = DetailActivity.newIntent(SearchActivity.this, post, "Ekşi Şeyler'de Ara");
+        startActivity(intent);
 
-        String transitionName = getString(R.string.image_transition_name);
-        ActivityOptionsCompat options =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(SearchActivity.this,
-                        viewHolder.image,
-                        transitionName
-                );
-
-        ActivityCompat.startActivity(SearchActivity.this, intent, options.toBundle());
     }
 
     @Override

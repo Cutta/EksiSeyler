@@ -1,5 +1,7 @@
 package com.cunoraz.eksiseyler.ui.main;
 
+import android.support.annotation.StringRes;
+
 import com.cunoraz.eksiseyler.ui.base.BaseView;
 
 /**
@@ -21,6 +23,10 @@ public class MainContract {
         void openFavouritesActivity();
 
         void openSearchActivity();
+
+        boolean isConnect();
+
+        void showSnackBar(@StringRes int message);
 
     }
 

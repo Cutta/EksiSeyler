@@ -52,15 +52,15 @@ public class DetailPresenter extends BasePresenter<DetailContract.View> implemen
             getView().updateWebViewLoadImage(mDetailUsecase.isSavingModeActive());
 
             if (getView().isConnect()) {
-                mDetailUsecase.getContentPureHtml(Utils.getEncodedPostName(mPost.getUrl()))
+      /*          mDetailUsecase.getContentPureHtml(Utils.getEncodedPostName(mPost.getUrl()))
                         .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                         try {
-                         /*   Element doc = Jsoup.parse((response.body().string()));
+                         *//*   Element doc = Jsoup.parse((response.body().string()));
                             Element link = doc.getElementsByClass("content-detail-inner").first();
-                            String contentMain = link.outerHtml();*/
+                            String contentMain = link.outerHtml();*//*
                             getView().loadWebViewWithTemplate(response.body().string());
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -72,8 +72,8 @@ public class DetailPresenter extends BasePresenter<DetailContract.View> implemen
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.d("onFailure", "onFailure: "+t.getMessage());
                     }
-                });
-                //getView().loadWebView(mPost.getUrl());
+                });*/
+                getView().loadWebView(mPost.getUrl());
             } else
                 getView().loadWebViewWithTemplate(mPageSource);
 
@@ -114,11 +114,11 @@ public class DetailPresenter extends BasePresenter<DetailContract.View> implemen
             getView().updateFavouriteMenuItem(false);
             getView().showRemovedFromFavourites();
         } else {
-            if (mPost.getImg() != null && !mPost.getImg().isEmpty()) {
+            if (mPost.getImg() != null && !mPost.getImg().isEmpty() && getView().saveToInternalStorage()) {
                 mDetailUsecase.addToFavouritePosts(mPost);
                 getView().updateFavouriteMenuItem(true);
                 getView().showAddedToFavourites();
-                getView().saveToInternalStorage();
+
             } else
                 getView().showToastMessage(R.string.favourite_adding_error_text);
         }

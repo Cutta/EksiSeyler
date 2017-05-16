@@ -16,8 +16,7 @@
             android:id="@+id/row_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:transitionName="@string/image_transition_name" />
+            android:adjustViewBounds="true" />
 
         <TextView
             android:id="@+id/row_title"

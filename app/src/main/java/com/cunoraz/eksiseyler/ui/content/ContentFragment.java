@@ -99,15 +99,7 @@ public class ContentFragment extends BaseFragment implements ContentContract.Vie
     public void openDetail(PostAdapter.PostViewHolder viewHolder, Post post) {
 
         Intent intent = DetailActivity.newIntent(getContext(), post, mChannel.getName());
-
-        String transitionName = getString(R.string.image_transition_name);
-        ActivityOptionsCompat options =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                        viewHolder.image,
-                        transitionName
-                );
-
-        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+        startActivity(intent);
 
     }
 

@@ -16,12 +16,7 @@ public class Utils {
         try {
             ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo i = conMgr.getActiveNetworkInfo();
-            if (i == null || !i.isConnected() || !i.isAvailable()) {
-                Toast.makeText(context, "İnternet bağlantısı mevcut değil.", Toast.LENGTH_SHORT).show();
-                return false;
-            } else {
-                return true;
-            }
+            return !(i == null || !i.isConnected() || !i.isAvailable());
         } catch (Exception e) {
             e.printStackTrace();
             return true;
