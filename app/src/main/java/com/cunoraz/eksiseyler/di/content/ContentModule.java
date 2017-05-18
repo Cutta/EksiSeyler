@@ -5,7 +5,6 @@ import com.cunoraz.eksiseyler.domain.content.ContentUsecase;
 import com.cunoraz.eksiseyler.domain.content.ContentUsecaseImpl;
 import com.cunoraz.eksiseyler.model.rest.ApiSource;
 import com.cunoraz.eksiseyler.ui.content.ContentContract;
-import com.cunoraz.eksiseyler.ui.content.ContentPresenter;
 
 import javax.inject.Named;
 

@@ -1,23 +1,12 @@
 package com.cunoraz.eksiseyler.ui.detail;
 
-import android.util.Log;
-
 import com.cunoraz.eksiseyler.R;
 import com.cunoraz.eksiseyler.domain.detail.DetailUsecase;
 import com.cunoraz.eksiseyler.model.rest.entity.Post;
 import com.cunoraz.eksiseyler.ui.base.BasePresenter;
-import com.cunoraz.eksiseyler.util.Utils;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by andanicalik on 03/05/17.

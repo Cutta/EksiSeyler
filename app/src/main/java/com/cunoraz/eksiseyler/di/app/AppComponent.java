@@ -1,7 +1,6 @@
 package com.cunoraz.eksiseyler.di.app;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.cunoraz.eksiseyler.app.EksiSeylerApp;
 import com.cunoraz.eksiseyler.model.pref.PreferencesHelper;

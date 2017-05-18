@@ -6,8 +6,6 @@ import com.cunoraz.eksiseyler.model.rest.entity.Post;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by andanicalik on 03/05/17.

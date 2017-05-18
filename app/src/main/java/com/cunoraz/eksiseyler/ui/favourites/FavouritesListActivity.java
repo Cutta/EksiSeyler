@@ -2,8 +2,6 @@ package com.cunoraz.eksiseyler.ui.favourites;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +22,6 @@ import com.cunoraz.eksiseyler.ui.detail.DetailActivity;
 import com.cunoraz.eksiseyler.util.DialogBuilder;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 

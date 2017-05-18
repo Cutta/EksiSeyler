@@ -2,8 +2,6 @@ package com.cunoraz.eksiseyler.di.app;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import com.cunoraz.eksiseyler.model.pref.PreferencesHelper;
 import com.cunoraz.eksiseyler.model.pref.PreferencesHelperImpl;

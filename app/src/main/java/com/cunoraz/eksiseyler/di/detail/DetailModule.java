@@ -1,7 +1,5 @@
 package com.cunoraz.eksiseyler.di.detail;
 
-import android.support.annotation.Nullable;
-
 import com.cunoraz.eksiseyler.di.PerActivity;
 import com.cunoraz.eksiseyler.domain.detail.DetailUsecase;
 import com.cunoraz.eksiseyler.domain.detail.DetailUsecaseImpl;

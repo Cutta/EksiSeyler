@@ -9,7 +9,7 @@ import retrofit2.Retrofit;
  */
 
 public class ApiSourceImpl implements ApiSource {
-    RetrofitInterface retrofitInterface;
+    private RetrofitInterface retrofitInterface;
 
     public ApiSourceImpl(Retrofit retrofit) {
         retrofitInterface = retrofit.create(RetrofitInterface.class);

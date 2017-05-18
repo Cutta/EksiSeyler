@@ -2,7 +2,6 @@ package com.cunoraz.eksiseyler.ui.detail;
 
 import android.support.annotation.StringRes;
 
-import com.cunoraz.eksiseyler.model.rest.entity.Post;
 import com.cunoraz.eksiseyler.ui.base.BaseView;
 
 /**

@@ -5,7 +5,6 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 
 import com.cunoraz.eksiseyler.R;
-import com.cunoraz.eksiseyler.ui.main.MainActivity;
 
 /**
  * Created by cuneytcarikci on 03/05/2017.
