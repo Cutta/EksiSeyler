@@ -117,11 +117,15 @@ public class ContentPresenter extends BasePresenter<ContentContract.View> implem
             Elements others = doc.select("div.content-box");
             for (Element element : others) {
                 post = new Post();
-                post.setUrl(element.select("a").get(2).attr("href"));
-                post.setImg(element.select("img").attr("data-src"));
-                post.setName(element.select("div.content-title").text());
-                if (post.getName() != null && !post.getName().equals(""))
-                    set.add(post);
+                try {
+                    post.setUrl(element.select("a").get(2).attr("href"));
+                    post.setImg(element.select("img").attr("data-src"));
+                    post.setName(element.select("div.content-title").text());
+                    if (post.getName() != null && !post.getName().equals(""))
+                        set.add(post);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
             ArrayList<Post> posts = new ArrayList<>();
             posts.addAll(set);
