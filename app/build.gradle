@@ -85,4 +85,7 @@ dependencies {
         transitive = true;
     }
 
+    //autofittextview
+    compile 'me.grantland:autofittextview:0.2.+'
+
 }

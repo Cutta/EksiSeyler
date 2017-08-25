@@ -201,13 +201,13 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         }
     }
 
-    private void setupFloatingActionButton() {//// TODO: 03/05/2017 direk kendi cagirabilmeli mi?
+    private void setupFloatingActionButton() {
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, mPost.getUrl());
+                sendIntent.putExtra(Intent.EXTRA_TEXT, webView.getUrl());
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }
